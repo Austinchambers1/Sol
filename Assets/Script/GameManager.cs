@@ -11,13 +11,13 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance = null;
 	public int winner = 0; // 0 for no winner, 1 for player 1, 2 for player 2
 	public bool gameOver = false;
-	public string lastMouseButtonPressed = "Left Button";
+//	public string lastMouseButtonPressed = "Left Button";
 	public Player Player1;
-	List<GameObject> godPowers = new List<GameObject>();
-	public GameObject prefabButton;
-	public GameObject prefabText;
-	public GameObject playerCursorPrefab;
-	GameObject godCursor;
+//	List<GameObject> godPowers = new List<GameObject>();
+//	public GameObject prefabButton;
+//	public GameObject prefabText;
+//	public GameObject playerCursorPrefab;
+//	GameObject godCursor;
 	GameObject curPlayer;
 //	GameObject playerHealthUI;
 //	GameObject godPowerUI;
@@ -33,14 +33,14 @@ public class GameManager : MonoBehaviour {
 	private bool gameStarted = false;
 
 	public GameObject playerHealth;
-	public GameObject godPower;
-	public Dictionary<string, Button> allButtons;
-	public Dictionary<string, Spawnable> allPowers;
-	public List<GodButtons> godButtons = new List<GodButtons> (); 
-	public int currIndex = 0;
-	public int maxButtons = 0;
+//	public GameObject godPower;
+//	public Dictionary<string, Button> allButtons;
+//	public Dictionary<string, Spawnable> allPowers;
+//	public List<GodButtons> godButtons = new List<GodButtons> (); 
+//	public int currIndex = 0;
+//	public int maxButtons = 0;
 
-	public float startX; // used by PlayerCursor for deadZone
+//	public float startX; // used by PlayerCursor for deadZone
 
 	void Awake () {
 //		Debug.Log ("Awake");
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitGame() {
+		/*
 		godCursor = (GameObject)Instantiate (playerCursorPrefab);
 
 //		Debug.Log ("init game");
@@ -112,6 +113,7 @@ public class GameManager : MonoBehaviour {
 //		godPowerUI.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0.0f, -45.0f);
 
 		startTime = Time.time;
+		*/
 	}
 		
 	// Update is called once per frame
@@ -146,25 +148,23 @@ public class GameManager : MonoBehaviour {
 //			playerHealthUI.GetComponent<Text>().text = "Player Health: " + curPlayer.GetComponent<Controller2D>().health.ToString ();
 		}
 //		godPowerUI.GetComponent<Text>().text = "Current Power: " + godCursor.GetComponent<PlayerCursor>().currentPower.ToString ();
-
+		/*
 		if (Input.GetMouseButton (0))
 			lastMouseButtonPressed = "Left button";
 		if (Input.GetMouseButton (1))
-			lastMouseButtonPressed = "Right button";		
+			lastMouseButtonPressed = "Right button";	
+		*/
 	}
 
 	void startGame() {
 		GUIHandler guihandler = FindObjectOfType<GUIHandler> ();
-		guihandler.P1Instructions.gameObject.SetActive(false);
-		guihandler.P2Instructions.gameObject.SetActive (false);
+		//guihandler.P1Instructions.gameObject.SetActive(false);
+		//guihandler.P2Instructions.gameObject.SetActive (false);
 
-		audio.transform.FindChild ("IntroAudio").GetComponent<AudioSource> ().Pause ();
-		audio.transform.FindChild ("GameAudio").GetComponent<AudioSource> ().Play ();
-		if (FindObjectOfType<Moon> () && FindObjectOfType<Moon> ().moonActive) {
-			FindObjectOfType<Moon> ().moonPower = 0.0f;
-		}
-		Destroy (startmsgs.gameObject);
-		Destroy (startObstacle.gameObject);
+		//audio.transform.FindChild ("IntroAudio").GetComponent<AudioSource> ().Pause ();
+		//audio.transform.FindChild ("GameAudio").GetComponent<AudioSource> ().Play ();
+		//Destroy (startmsgs.gameObject);
+		//Destroy (startObstacle.gameObject);
 		killAllSpawnables ();
 		Player1.Reset ();
 		gameStarted = true;

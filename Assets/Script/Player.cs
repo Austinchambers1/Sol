@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
 		transform.position = startPosition;
 		controller.accumulatedVelocity = Vector2.zero;
 		attackable.resetHealth ();
-		FindObjectOfType<PlayerCursor> ().currentPower = 20.0f;
+		//FindObjectOfType<PlayerCursor> ().currentPower = 20.0f;
 		attackable.energy = 20.0f;
 		// reset should also bring back the startblock, if we want to keep using it.
 
@@ -84,7 +84,7 @@ public class Player : MonoBehaviour {
 		anim.SetBool ("grounded", controller.onGround);
 		anim.SetBool ("tryingToMove", false);
 		if (timeSinceLastAttack > 0.3f) {
-			anim.SetBool ("isattacking", false);
+			//anim.SetBool ("isattacking", false);
 		}
 		//if (lastHealth > GetComponent<Attackable> ().health) {
 		//			Debug.Log ("Reset");

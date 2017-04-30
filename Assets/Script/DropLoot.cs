@@ -26,7 +26,7 @@ public class DropLoot : MonoBehaviour {
 			GameObject go = Instantiate(energyPowerUp,transform.position,Quaternion.identity) as GameObject; 
 			go.GetComponent<Movement> ().addToVelocity (new Vector2 (Random.Range (-15, 15), 30));
 		}
-		if (FindObjectOfType<Moon> () && FindObjectOfType<Moon> ().moonActive) {
+		/*if (FindObjectOfType<Moon> () && FindObjectOfType<Moon> ().moonActive) {
 			rand = Random.value;
 			if (rand * 100 < chanceDropPowerupSm) {
 				GameObject go = Instantiate (powerUpSm, transform.position, Quaternion.identity) as GameObject; 
@@ -37,6 +37,6 @@ public class DropLoot : MonoBehaviour {
 				GameObject go = Instantiate (powerUpLg, transform.position, Quaternion.identity) as GameObject; 
 				go.GetComponent<Movement> ().addToVelocity (new Vector2 (Random.Range (-15, 15), 30));
 			}
-		}
+		}*/
 	}
 }

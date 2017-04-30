@@ -16,6 +16,7 @@ public class Fighter : MonoBehaviour {
 	public bool canShoot;
 	public GameObject projectile;
 	float timeSinceLastAttack = 0.0f;
+	public float attackDuration = 0.3f;
 
 	float currentCooldown = 0.0f;
 	string myFac;
@@ -43,7 +44,7 @@ public class Fighter : MonoBehaviour {
 				anim.SetBool ("tryingToMove", true);
 			}
 		}
-		if (timeSinceLastAttack < 0.23f) {
+		if (timeSinceLastAttack < attackDuration) {
 			anim.SetBool ("isattacking", true);
 		} else {
 			anim.SetBool ("isattacking", false);
