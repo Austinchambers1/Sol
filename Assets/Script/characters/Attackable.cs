@@ -15,6 +15,9 @@ public class Attackable : MonoBehaviour {
 	public GameObject HitEffect;
 	public GameObject HealEffect;
 	public float EnergyRegenRate = 10.0f;
+	public string mHitSound = "None";
+
+	public Dictionary<string,float> resistences = new Dictionary<string,float>();
 
 	Movement movementController;
 	// Use this for initialization
@@ -36,8 +39,55 @@ public class Attackable : MonoBehaviour {
 			Destroy (gameObject);
 		}
 		modifyEnergy(EnergyRegenRate * Time.deltaTime);
+		foreach (string k in resistences.Keys) {
+			resistences.Add (k, resistences [k] - Time.deltaTime);
+			if (resistences [k] <= 0.0f) {
+				resistences.Remove (k);
+			}
+		}
 	}
 
+	public void addResistence(string attribute, float time) {
+	}
+
+	public string takeHit(hitbox hb) {
+		
+		if (hb.mAttr != null) {
+			foreach (string k in resistences.Keys) {
+				if (hb.mAttr.BinarySearch(k) != null) {
+					if (hb.stun > 0 && GetComponent<Fighter> ()) {
+						GetComponent<Fighter> ().registerStun( hb.stun,false,hb);
+					}
+					return "block";
+				}
+			}
+		}
+		damageObj (hb.damage);
+		if (mHitSound != "None") {
+			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.FindChild (mHitSound).GetComponent<AudioSource> ().Play ();
+		}
+		if (gameObject.GetComponent<Movement> ()) {
+			if (hb.fixedKnockback) {
+				addToVelocity (hb.knockback);
+			} else {
+				Vector3 otherPos = hb.gameObject.transform.position;
+				float angle = Mathf.Atan2 (transform.position.y - otherPos.y, transform.position.x - otherPos.x); //*180.0f / Mathf.PI;
+				float magnitude = hb.knockback.magnitude;
+				float forceX = Mathf.Cos (angle) * magnitude;
+				float forceY = Mathf.Sin (angle) * magnitude;
+				Vector2 force = new Vector2 (forceX, forceY);
+				float counterF = (gameObject.GetComponent<Movement> ().velocity.y * (1 / Time.deltaTime));
+				if (counterF < 0) {
+					force.y = force.y - counterF;
+				}
+				addToVelocity (force);
+			}
+		}
+		if (hb.stun > 0 && GetComponent<Fighter> ()) {
+			GetComponent<Fighter> ().registerStun( hb.stun,true,hb);
+		}
+		return "hit";
+	}
 	public void damageObj(float damage) {
 		//Debug.Log ("Damage Taken. Health before: " + health);
 		health = Mathf.Max(Mathf.Min(max_health, health - damage),0);

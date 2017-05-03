@@ -17,7 +17,7 @@ public class AttackIfClose : MonoBehaviour {
 	void Update () {
 		if (followai.targetSet) {	
 			if (Vector3.Distance (followai.followObj.transform.position, transform.position) < attackDist) {
-				gameObject.GetComponent<Fighter> ().tryAttack ();
+				gameObject.GetComponent<Fighter> ().tryAttack ("attack");
 			}
 		}
 	}

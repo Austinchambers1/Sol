@@ -1,13 +1,12 @@
 fileFormatVersion: 2
-guid: 38a046004ad52df459b0f3380a0459c2
-timeCreated: 1493747456
+guid: a1e8299bfeaae05469852edb0d504b50
+timeCreated: 1493793739
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: c_jumping_0
-    21300002: c_jumping_1
-    21300004: c_jumping_2
-    21300006: c_jumping_3
+    21300000: s_block_0
+    21300002: s_block_1
+    21300004: s_block_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -74,54 +73,41 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: c_jumping_0
+      name: s_block_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 40
         height: 64
       alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: c_jumping_1
+      name: s_block_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 40
         y: 0
-        width: 64
+        width: 40
         height: 64
       alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: c_jumping_2
+      name: s_block_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 80
         y: 0
-        width: 64
+        width: 40
         height: 64
       alignment: 9
-      pivot: {x: 0.25, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: c_jumping_3
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

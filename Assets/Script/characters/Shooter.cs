@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (HitboxMaker))]
 public class Shooter : MonoBehaviour {
 
 	public GameObject projectile;
@@ -14,13 +15,16 @@ public class Shooter : MonoBehaviour {
 		Vector3 newPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, 0);
 		GameObject go = Instantiate(projectile,newPos,Quaternion.identity) as GameObject; 
 		Projectile proj = go.GetComponent<Projectile> ();
-		hitbox newBox = go.GetComponent<hitbox> ();
+		hitbox newBox = go.GetComponentInChildren<hitbox> ();
+		newBox.creator = gameObject;
 		newBox.setFaction (faction);
 		if (facingLeft) {
-			SpriteRenderer sprite = go.GetComponent<SpriteRenderer> ();
-			sprite.flipX = true;
 			proj.projectileSpeed = new Vector3 (-proj.projectileSpeed.x, proj.projectileSpeed.y, 0f);
 		}
+		proj.facingLeft = facingLeft;
 		return proj;
+	}
+
+	public void registerHit(GameObject otherObj) {
 	}
 }

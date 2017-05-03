@@ -3,38 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (HitboxMaker))]
-//[RequireComponent (typeof (Shooter))]
 [RequireComponent (typeof (Movement))]
-public class Fighter : MonoBehaviour {
-	public float damage = 10.0f;
-	public Vector2 knockback = new Vector2(0.0f,40.0f);
-	public Vector2 hitboxScale = new Vector2 (1.0f, 1.0f);
-	public bool timedbomb = true;
-	public float hitboxDuration = 0.5f;
-	public float attackCooldown = 1.0f;
-	public Vector2 offset = new Vector2(0f,0f);
-	public bool canShoot;
-	public GameObject projectile;
-	float timeSinceLastAttack = 0.0f;
-	public float attackDuration = 0.3f;
 
-	float currentCooldown = 0.0f;
+public class Fighter : MonoBehaviour {
+	public float recoveryTime = 0.0f;
+	public float startUpTime = 0.0f;
+	public float stunTime = 0.0f;
+	public Dictionary<string,AttackInfo> attacks = new Dictionary<string,AttackInfo>();
 	string myFac;
-	Movement controller;
+	Movement movement;
 	Animator anim;
+	GameManager gameManager;
+	AttackInfo currentAttack;
+	public string currentAttackName;
+	bool hitboxCreated;
+	public bool reflectProj;
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
-		controller = GetComponent<Movement> ();
+		movement = GetComponent<Movement> ();
+		gameManager = FindObjectOfType<GameManager> ();
 		myFac = gameObject.GetComponent<Attackable> ().faction;
-		currentCooldown = attackCooldown / 2f;
+		endAttack ();
+		AttackInfo[] at = gameObject.GetComponents<AttackInfo> ();
+		foreach (AttackInfo a in at) {
+			attacks.Add (a.attackName, a);
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		anim.SetBool ("tryingToMove", false);
-
-		anim.SetBool ("grounded", controller.collisions.below);
+		anim.SetBool ("grounded", movement.collisions.below);
 		if (GetComponent<FollowPlayer> ()) {
 			if (GetComponent<FollowPlayer> ().inputX != 0.0f) {
 				anim.SetBool ("tryingToMove", true);
@@ -44,32 +44,94 @@ public class Fighter : MonoBehaviour {
 				anim.SetBool ("tryingToMove", true);
 			}
 		}
-		if (timeSinceLastAttack < attackDuration) {
-			anim.SetBool ("isattacking", true);
-		} else {
-			anim.SetBool ("isattacking", false);
+		if (stunTime > 0.0f) {
+			stunTime = Mathf.Max (0.0f, stunTime - Time.deltaTime);
+			if (stunTime == 0.0f) {
+				endStun ();
+			}
 		}
-		timeSinceLastAttack += Time.deltaTime;
+		if (currentAttackName != "none") {
+			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
+			if (hitboxCreated == false) {
+				if (startUpTime <= 0.0f) {
+					hitboxCreated = true;
+					if (currentAttack.createHitbox) {
+						Vector2 realKB = currentAttack.knockback;
+						Vector2 realOff = currentAttack.offset;
+						currentAttack.onAttack ();
+						if (gameObject.GetComponent<Movement> ().facingLeft) {
+							realKB = new Vector2 (-currentAttack.knockback.x, currentAttack.knockback.y);
+							realOff = new Vector2 (-currentAttack.offset.x, currentAttack.offset.y);
+						}
+						gameObject.GetComponent<HitboxMaker> ().hitboxReflect = reflectProj;
+						gameObject.GetComponent<HitboxMaker> ().stun = currentAttack.stun;
+						gameObject.GetComponent<HitboxMaker> ().createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+					}
+				} else {
+					startUpTime = Mathf.Max (0.0f, startUpTime - Time.deltaTime);
+				}
+			} else {
+				if (recoveryTime <= 0.0f) {
+					endAttack ();
+				} else {
+					recoveryTime = Mathf.Max (0.0f, recoveryTime - Time.deltaTime);
+				}
+			}
+		}
+	}
+	public bool isAttacking() {
+		return (currentAttackName == "none");
+	}
 
-		if (currentCooldown > 0.0f) {
-			currentCooldown = currentCooldown - Time.deltaTime;
+	public void registerStun(float stunTime, bool defaultStun,hitbox hb) {
+		if (defaultStun) {
+			anim.SetBool ("hit", true);
+			endAttack ();
+			this.stunTime = stunTime;
+		}
+		if (currentAttack != null) {
+			currentAttack.onInterrupt (stunTime,defaultStun,hb);
+		}
+	}
+	public void registerHit(GameObject otherObj) {
+		if (currentAttack != null) {
+			currentAttack.onHitConfirm (otherObj);
 		}
 	}
 
-	public bool tryAttack() {
-		if (currentCooldown <= 0.0f) {
-			
-			currentCooldown = attackCooldown;
-			Vector2 realKB = knockback;
-			Vector2 realOff = offset;
-			timeSinceLastAttack = 0.0f;
-			if (gameObject.GetComponent<Movement> ().facingLeft) {
-				realKB = new Vector2 (-knockback.x, knockback.y);
-				realOff = new Vector2 (-offset.x, offset.y);
-			}
-			gameObject.GetComponent<HitboxMaker> ().createHitbox(hitboxScale,realOff,damage,hitboxDuration,realKB,true,myFac,true);
-			if (canShoot) {
-				GetComponent<Shooter> ().fire(Vector2.zero,gameObject.GetComponent<Movement> ().facingLeft,myFac);
+	public void endStun() {
+		anim.SetBool ("hit", false);
+		movement.canMove = true;
+	}
+	public void endAttack() {
+		if (currentAttack != null) {
+			currentAttack.onConclude ();
+			currentAttack.timeSinceStart = 0.0f;
+		}
+		currentAttackName = "none";
+		startUpTime = 0.0f;
+		recoveryTime = 0.0f;
+		anim.speed = 1.0f;
+		hitboxCreated = false;
+		currentAttack = null;
+		reflectProj = false;
+		anim.SetInteger ("attack", 0);
+		movement.canMove = true;
+	}
+	public bool tryAttack(string attackName) {
+		if (currentAttackName == "none" && attacks.ContainsKey(attackName)) {
+			hitboxCreated = false;
+			currentAttackName = attackName;
+			currentAttack = attacks[currentAttackName];
+			startUpTime = currentAttack.startUpTime;
+			recoveryTime = currentAttack.recoveryTime;
+			anim.SetInteger ("attack", currentAttack.animationID);
+			anim.speed = currentAttack.animSpeed;
+			movement.canMove = false;
+			currentAttack.onStartUp ();
+			currentAttack.timeSinceStart = 0.0f;
+			if (currentAttack.soundFX != "None") {
+				gameManager.soundfx.gameObject.transform.FindChild (currentAttack.soundFX).GetComponent<AudioSource> ().Play ();
 			}
 			return true;
 		}

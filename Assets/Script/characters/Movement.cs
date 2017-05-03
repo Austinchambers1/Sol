@@ -15,6 +15,7 @@ public class Movement : MonoBehaviour {
 	public float gravityScale = 40.0f;
 	public float speed;
 	public bool facingLeft = false;
+	public bool canMove = true;
 
 	float maxClimbAngle = 80;
 
@@ -34,6 +35,7 @@ public class Movement : MonoBehaviour {
 		bCollider = GetComponent<BoxCollider2D> ();
 		sprite = GetComponent<SpriteRenderer> ();
 		CalculateRaySpacing ();
+		canMove = true;
 	}
 
 	public void Move(Vector2 velocity) {
@@ -77,7 +79,9 @@ public class Movement : MonoBehaviour {
 	public void Move(Vector2 veloc, Vector2 input) {
 		//Debug.Log ("----");
 		//Debug.Log (veloc.y);
-
+		if (!canMove) {
+			input = Vector2.zero;
+		}
 
 		veloc = veloc * Time.deltaTime;
 		velocity.x = veloc.x;
