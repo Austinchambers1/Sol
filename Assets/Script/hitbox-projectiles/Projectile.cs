@@ -44,11 +44,11 @@ public class Projectile : MonoBehaviour {
 		if (!GetComponentInChildren<hitbox> ()) {
 			Debug.Log ("Projectile destroyed due to no hitbox");
 			Destroy (gameObject);
-		} else if (other.gameObject.GetComponent<hitbox>() && other.gameObject.GetComponent<hitbox>().reflect){ 
 		} else if (other.gameObject.GetComponent<Attackable> () && other.gameObject.GetComponent<Attackable> ().faction == GetComponentInChildren<hitbox> ().faction ||
 			penetrating) {
-		}else {
-			Debug.Log ("destroy via projectile");
+		}else if (other.gameObject.GetComponent<hitbox> ()) { 
+			
+		} else {
 			hitbox hb = GetComponentInChildren<hitbox> ();
 			hb.OnTriggerEnter2D (other);
 			Destroy (gameObject);

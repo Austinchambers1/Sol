@@ -18,6 +18,7 @@ public class Fighter : MonoBehaviour {
 	public string currentAttackName;
 	bool hitboxCreated;
 	public bool reflectProj;
+	float maxStun;
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
@@ -45,6 +46,9 @@ public class Fighter : MonoBehaviour {
 			}
 		}
 		if (stunTime > 0.0f) {
+			if (stunTime != maxStun) {
+				anim.SetBool ("hitInit", false);
+			}
 			stunTime = Mathf.Max (0.0f, stunTime - Time.deltaTime);
 			if (stunTime == 0.0f) {
 				endStun ();
@@ -83,11 +87,15 @@ public class Fighter : MonoBehaviour {
 		return (currentAttackName == "none");
 	}
 
-	public void registerStun(float stunTime, bool defaultStun,hitbox hb) {
+	public void registerStun(float st, bool defaultStun,hitbox hb) {
 		if (defaultStun) {
 			anim.SetBool ("hit", true);
+			anim.SetBool ("hitInit", true);
 			endAttack ();
-			this.stunTime = stunTime;
+			stunTime = st;
+			maxStun = st;
+			movement.canMove = false;
+
 		}
 		if (currentAttack != null) {
 			currentAttack.onInterrupt (stunTime,defaultStun,hb);
@@ -101,7 +109,10 @@ public class Fighter : MonoBehaviour {
 
 	public void endStun() {
 		anim.SetBool ("hit", false);
+		anim.SetBool ("hitInit", false);
 		movement.canMove = true;
+		stunTime = 0.0f;
+		maxStun = 0.0f;
 	}
 	public void endAttack() {
 		if (currentAttack != null) {
