@@ -59,10 +59,11 @@ public class Fighter : MonoBehaviour {
 			if (hitboxCreated == false) {
 				if (startUpTime <= 0.0f) {
 					hitboxCreated = true;
+					currentAttack.onAttack ();
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
-						currentAttack.onAttack ();
+
 						if (gameObject.GetComponent<Movement> ().facingLeft) {
 							realKB = new Vector2 (-currentAttack.knockback.x, currentAttack.knockback.y);
 							realOff = new Vector2 (-currentAttack.offset.x, currentAttack.offset.y);
@@ -70,6 +71,9 @@ public class Fighter : MonoBehaviour {
 						gameObject.GetComponent<HitboxMaker> ().hitboxReflect = reflectProj;
 						gameObject.GetComponent<HitboxMaker> ().stun = currentAttack.stun;
 						gameObject.GetComponent<HitboxMaker> ().createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+					}
+					if (currentAttack.recoveryAnimID != currentAttack.animationID && currentAttack.recoveryAnimID > 0) {
+						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
 					}
 				} else {
 					startUpTime = Mathf.Max (0.0f, startUpTime - Time.deltaTime);

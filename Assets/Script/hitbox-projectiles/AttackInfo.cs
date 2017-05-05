@@ -11,6 +11,7 @@ public class AttackInfo : MonoBehaviour {
 	public float startUpTime = 0.0f;
 	public float recoveryTime = 1.0f;
 	public int animationID = 1;
+	public int recoveryAnimID = -1;
 	public float animSpeed = 1f;
 	public string soundFX = "None";
 	public string attackName = "default";
@@ -18,7 +19,11 @@ public class AttackInfo : MonoBehaviour {
 	public bool melee = true;
 	public bool createHitbox = true;
 
-	void Start () {}
+	void Start () {
+		if (recoveryAnimID <= 0) {
+			recoveryAnimID = animationID;
+		}
+	}
 
 	// Update is called once per frame
 	void Update () {}

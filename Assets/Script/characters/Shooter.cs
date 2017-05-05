@@ -12,8 +12,12 @@ public class Shooter : MonoBehaviour {
 	void Update () {}
 
 	public Projectile fire(Vector2 offset,bool facingLeft,string faction) {
+		Debug.Log ("Shooter fire");
+		return fire (offset, facingLeft, faction, projectile);
+	}
+	public Projectile fire(Vector2 offset,bool facingLeft,string faction,GameObject shotPrefab) {
 		Vector3 newPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, 0);
-		GameObject go = Instantiate(projectile,newPos,Quaternion.identity) as GameObject; 
+		GameObject go = Instantiate(shotPrefab,newPos,Quaternion.identity) as GameObject; 
 		Projectile proj = go.GetComponent<Projectile> ();
 		hitbox newBox = go.GetComponentInChildren<hitbox> ();
 		newBox.creator = gameObject;
