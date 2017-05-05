@@ -21,7 +21,6 @@ public class AtkShoot : AttackInfo {
 
 	public override void onAttack ()
 	{
-		Debug.Log ("Trying to shoot thing.");
 		mShoot.fire (shotOffset,movt.facingLeft,GetComponent<Attackable>().faction,projectile);
 	}
 }

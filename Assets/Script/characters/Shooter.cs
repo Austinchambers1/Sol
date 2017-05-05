@@ -5,15 +5,14 @@ using UnityEngine;
 [RequireComponent (typeof (HitboxMaker))]
 public class Shooter : MonoBehaviour {
 
-	public GameObject projectile;
+	public GameObject defaultProjectile;
 	// Use this for initialization
 	void Start () {}
 	// Update is called once per frame
 	void Update () {}
 
 	public Projectile fire(Vector2 offset,bool facingLeft,string faction) {
-		Debug.Log ("Shooter fire");
-		return fire (offset, facingLeft, faction, projectile);
+		return fire (offset, facingLeft, faction, defaultProjectile);
 	}
 	public Projectile fire(Vector2 offset,bool facingLeft,string faction,GameObject shotPrefab) {
 		Vector3 newPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, 0);
