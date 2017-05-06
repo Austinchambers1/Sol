@@ -37,4 +37,11 @@ public class HitboxMaker : MonoBehaviour {
 			gameObject.GetComponent<Shooter> ().registerHit (otherObj);
 		}
 	}
+	public void addAttrs(string attr) {
+		mAttrs.Add (attr);
+	}
+
+	public void clearAttrs() {
+		mAttrs = new List<string> ();
+	}
 }

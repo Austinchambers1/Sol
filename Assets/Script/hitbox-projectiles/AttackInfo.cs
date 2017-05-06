@@ -18,8 +18,12 @@ public class AttackInfo : MonoBehaviour {
 	public float timeSinceStart = 0.0f;
 	public bool melee = true;
 	public bool createHitbox = true;
+	protected Fighter fighter;
+	protected Attackable attackable;
 
 	void Start () {
+		fighter = GetComponent<Fighter> ();
+		attackable = GetComponent<Attackable> ();
 		if (recoveryAnimID <= 0) {
 			recoveryAnimID = animationID;
 		}
@@ -28,10 +32,10 @@ public class AttackInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {}
 
-	public virtual void onStartUp() {
-	}
-	public virtual void onAttack() {
-	}
+	public virtual void onStartUp() {}
+
+	public virtual void onAttack() {}
+
 	public virtual void onConclude() {
 	}
 	public virtual void onHitConfirm(GameObject other) {

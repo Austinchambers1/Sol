@@ -17,9 +17,9 @@ public class SimpleBeatAtk : Beats {
 	void Update () {}
 
 	public override void onBeat (int beatNo) {
-		Debug.Log ("on simple beat");
+		//Debug.Log ("on simple beat");
 		if (beatNo == attackOnBeat) {
-			Debug.Log ("trying attack: " + attackName);
+			//Debug.Log ("trying attack: " + attackName);
 			mFighter.tryAttack (attackName);
 		}
 	}

@@ -69,7 +69,7 @@ public class hitbox : MonoBehaviour {
 			creator.GetComponent<HitboxMaker> ().registerHit (other.gameObject);
 		}
 		if (other.gameObject.GetComponent<Attackable>()){
-			Debug.Log("mFact: " + faction + " tFact: " + other.gameObject.GetComponent<Attackable>().faction);
+			//Debug.Log("mFact: " + faction + " tFact: " + other.gameObject.GetComponent<Attackable>().faction);
 		}
 		if (other.gameObject.GetComponent<Attackable>() &&
 			!collidedObjs.Contains (other.gameObject.GetComponent<Attackable> ())) {
@@ -78,7 +78,7 @@ public class hitbox : MonoBehaviour {
 			    faction != otherObj.faction) {
 				otherObj.takeHit (this);
 				if (creator) {
-					Debug.Log ("Damage confirm");
+					//Debug.Log ("Damage confirm");
 					if (creator.GetComponent<HitboxMaker> ()) {
 						creator.GetComponent<HitboxMaker> ().registerHit (other.gameObject);
 					} else if (creator.GetComponent<Shooter> ()) {
