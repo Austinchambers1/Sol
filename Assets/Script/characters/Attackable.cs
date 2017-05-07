@@ -40,24 +40,34 @@ public class Attackable : MonoBehaviour {
 		}
 		modifyEnergy(EnergyRegenRate * Time.deltaTime);
 		foreach (string k in resistences.Keys) {
-			resistences.Add (k, resistences [k] - Time.deltaTime);
+			//Debug.Log ("key: " + k + " time: " + resistences [k]);
+			float time = resistences [k] - Time.deltaTime;
+			resistences [k] = time;
 			if (resistences [k] <= 0.0f) {
+				//Debug.Log ("removing resistance for" + k);
 				resistences.Remove (k);
 			}
 		}
 	}
 
 	public void addResistence(string attribute, float time) {
+		/*if (resistences.ContainsKey(attribute)) {
+			resistences.Remove (attribute);
+		}
+		resistences.Add (attribute, time);*/
+		resistences [attribute] = time;
 	}
 
 	public string takeHit(hitbox hb) {
 		
 		if (hb.mAttr != null) {
 			foreach (string k in resistences.Keys) {
+				Debug.Log (k);
 				if (hb.mAttr.BinarySearch(k) != null) {
 					if (hb.stun > 0 && GetComponent<Fighter> ()) {
 						GetComponent<Fighter> ().registerStun( hb.stun,false,hb);
 					}
+					Debug.Log ("attack blocked");
 					return "block";
 				}
 			}

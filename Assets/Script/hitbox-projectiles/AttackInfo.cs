@@ -11,22 +11,31 @@ public class AttackInfo : MonoBehaviour {
 	public float startUpTime = 0.0f;
 	public float recoveryTime = 1.0f;
 	public int animationID = 1;
+	public int recoveryAnimID = -1;
 	public float animSpeed = 1f;
 	public string soundFX = "None";
 	public string attackName = "default";
 	public float timeSinceStart = 0.0f;
 	public bool melee = true;
 	public bool createHitbox = true;
+	protected Fighter fighter;
+	protected Attackable attackable;
 
-	void Start () {}
+	void Start () {
+		fighter = GetComponent<Fighter> ();
+		attackable = GetComponent<Attackable> ();
+		if (recoveryAnimID <= 0) {
+			recoveryAnimID = animationID;
+		}
+	}
 
 	// Update is called once per frame
 	void Update () {}
 
-	public virtual void onStartUp() {
-	}
-	public virtual void onAttack() {
-	}
+	public virtual void onStartUp() {}
+
+	public virtual void onAttack() {}
+
 	public virtual void onConclude() {
 	}
 	public virtual void onHitConfirm(GameObject other) {

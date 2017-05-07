@@ -14,6 +14,7 @@ public class Fighter : MonoBehaviour {
 	Movement movement;
 	Animator anim;
 	GameManager gameManager;
+	HitboxMaker hbm;
 	AttackInfo currentAttack;
 	public string currentAttackName;
 	bool hitboxCreated;
@@ -25,6 +26,7 @@ public class Fighter : MonoBehaviour {
 		movement = GetComponent<Movement> ();
 		gameManager = FindObjectOfType<GameManager> ();
 		myFac = gameObject.GetComponent<Attackable> ().faction;
+		hbm = GetComponent<HitboxMaker> ();
 		endAttack ();
 		AttackInfo[] at = gameObject.GetComponents<AttackInfo> ();
 		foreach (AttackInfo a in at) {
@@ -59,17 +61,23 @@ public class Fighter : MonoBehaviour {
 			if (hitboxCreated == false) {
 				if (startUpTime <= 0.0f) {
 					hitboxCreated = true;
+					currentAttack.onAttack ();
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
-						currentAttack.onAttack ();
+						if (currentAttack.melee) {
+							hbm.addAttrs ("melee");
+						}
 						if (gameObject.GetComponent<Movement> ().facingLeft) {
 							realKB = new Vector2 (-currentAttack.knockback.x, currentAttack.knockback.y);
 							realOff = new Vector2 (-currentAttack.offset.x, currentAttack.offset.y);
 						}
-						gameObject.GetComponent<HitboxMaker> ().hitboxReflect = reflectProj;
-						gameObject.GetComponent<HitboxMaker> ().stun = currentAttack.stun;
-						gameObject.GetComponent<HitboxMaker> ().createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+						hbm.hitboxReflect = reflectProj;
+						hbm.stun = currentAttack.stun;
+						hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+					}
+					if (currentAttack.recoveryAnimID != currentAttack.animationID && currentAttack.recoveryAnimID > 0) {
+						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
 					}
 				} else {
 					startUpTime = Mathf.Max (0.0f, startUpTime - Time.deltaTime);
@@ -111,6 +119,7 @@ public class Fighter : MonoBehaviour {
 		anim.SetBool ("hit", false);
 		anim.SetBool ("hitInit", false);
 		movement.canMove = true;
+		hbm.clearAttrs ();
 		stunTime = 0.0f;
 		maxStun = 0.0f;
 	}

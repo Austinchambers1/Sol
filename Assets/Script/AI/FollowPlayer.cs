@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour {
 
 	public Player followObj;
 	public float bottomOfTheWorld = -10.0f;
-	public Movement controller;
+	Movement controller;
 	float gravity;
 	float jumpVelocity;
 	Vector3 velocity;
@@ -15,14 +15,14 @@ public class FollowPlayer : MonoBehaviour {
 
 	public float jumpHeight = 4.0f;
 	public float timeToJumpApex = .4f;
-	public string playerName = "Player 1";
 	float accelerationTimeAirborne = .2f;
 	float accelerationTimeGrounded = .1f;
 	public float moveSpeed = 8.0f;
 	public bool targetSet = true;
-	public float targetDistance = 0.0f;
+	public float minDistance = 1.0f;
+	public float maxDistance = 10.0f;
 	public float inputX = 0.0f;
-	public float inputY = 0.0f;
+	float inputY = 0.0f;
 
 
 	void Start () {
@@ -31,7 +31,6 @@ public class FollowPlayer : MonoBehaviour {
 		controller.setGravityScale(gravity);
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		setTarget(FindObjectOfType<Player> ());
-
 	}
 
 	void setTarget(Player target) {
@@ -45,7 +44,8 @@ public class FollowPlayer : MonoBehaviour {
 		}
 		inputX = 0.0f;
 		inputY = 0.0f;
-		if (Vector3.Distance (transform.position, followObj.transform.position) > targetDistance) {
+		float dist = Vector3.Distance (transform.position, followObj.transform.position);
+		if (controller.canMove && dist > minDistance && dist < maxDistance) {
 			if (followObj.transform.position.x > transform.position.x) {
 				controller.setFacingLeft (false);
 				inputX = 1.0f;
@@ -57,9 +57,8 @@ public class FollowPlayer : MonoBehaviour {
 		float targetVelocityX = inputX * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 		Vector2 input = new Vector2 (inputX, inputY);
-		//Debug.Log (controller.falling);
-		//Debug.Log ((controller.falling == "right"));
-		if ((controller.falling == "left" || controller.falling == "right") && controller.collisions.below) {
+
+		if (controller.canMove && (controller.falling == "left" || controller.falling == "right") && controller.collisions.below) {
 			velocity.y = jumpVelocity;
 		}
 		velocity.y += gravity * Time.deltaTime;
