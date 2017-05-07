@@ -10,6 +10,7 @@ public class SimpleTurret : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentInt = interval;
+
 		b = GetComponent<Beats> ();
 	}
 
