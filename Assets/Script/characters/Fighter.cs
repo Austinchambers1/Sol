@@ -85,6 +85,7 @@ public class Fighter : MonoBehaviour {
 			} else {
 				if (recoveryTime <= 0.0f) {
 					endAttack ();
+
 				} else {
 					recoveryTime = Mathf.Max (0.0f, recoveryTime - Time.deltaTime);
 				}

@@ -37,21 +37,22 @@ public class FollowPlayer : MonoBehaviour {
 		targetSet = true;
 		followObj = target;
 	}
-	// Update is called once per frame
-	void Update () {
-		if (controller.collisions.above || controller.collisions.below) {
-			velocity.y = 0.0f;
-		}
+
+	public void moveToPlayer() {
 		inputX = 0.0f;
 		inputY = 0.0f;
 		float dist = Vector3.Distance (transform.position, followObj.transform.position);
-		if (controller.canMove && dist > minDistance && dist < maxDistance) {
+		if (controller.canMove && dist < maxDistance) {
+
 			if (followObj.transform.position.x > transform.position.x) {
+				if ( dist > minDistance)
+					inputX = 1.0f;
 				controller.setFacingLeft (false);
-				inputX = 1.0f;
+
 			} else {
+				if ( dist > minDistance)
+					inputX = -1.0f;
 				controller.setFacingLeft (true);
-				inputX = -1.0f;
 			}
 		}
 		float targetVelocityX = inputX * moveSpeed;
@@ -64,5 +65,14 @@ public class FollowPlayer : MonoBehaviour {
 		velocity.y += gravity * Time.deltaTime;
 
 		controller.Move (velocity, input);
+	}
+
+	// Update is called once per frame
+	void Update () {
+		if (controller.collisions.above || controller.collisions.below) {
+			velocity.y = 0.0f;
+		}
+		moveToPlayer ();
+
 	}
 }
