@@ -22,6 +22,7 @@ public class Fighter : MonoBehaviour {
 	float maxStun;
 
 	float beatTime;
+	float animationRatio;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +37,7 @@ public class Fighter : MonoBehaviour {
 			attacks.Add (a.attackName, a);
 		}
 		beatTime = 60.0f / FindObjectOfType<BeatTracker> ().Tempo;
+		animationRatio = FindObjectOfType<BeatTracker> ().Tempo / 100.0f;
 	}
 
 	// Update is called once per frame
@@ -151,7 +153,7 @@ public class Fighter : MonoBehaviour {
 			startUpTime = currentAttack.startUpTime * beatTime;
 			recoveryTime = currentAttack.recoveryTime * beatTime;
 			anim.SetInteger ("attack", currentAttack.animationID);
-			anim.speed = currentAttack.animSpeed;
+			anim.speed = currentAttack.animSpeed * animationRatio;
 			movement.canMove = false;
 			currentAttack.onStartUp ();
 			currentAttack.timeSinceStart = 0.0f;
