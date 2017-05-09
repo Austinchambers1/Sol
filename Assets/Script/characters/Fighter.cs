@@ -69,7 +69,7 @@ public class Fighter : MonoBehaviour {
 					hitboxCreated = true;
 					currentAttack.onAttack ();
 					if (currentAttack.soundFX != null) {
-						currentAttack.soundFX.GetComponent<AudioSource> ().Play ();
+						currentAttack.soundFX.Play ();
 					}
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
