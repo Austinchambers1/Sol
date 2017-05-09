@@ -68,6 +68,9 @@ public class Fighter : MonoBehaviour {
 				if (startUpTime <= 0.0f) {
 					hitboxCreated = true;
 					currentAttack.onAttack ();
+					if (currentAttack.soundFX != null) {
+						currentAttack.soundFX.Play ();
+					}
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
@@ -157,9 +160,6 @@ public class Fighter : MonoBehaviour {
 			movement.canMove = false;
 			currentAttack.onStartUp ();
 			currentAttack.timeSinceStart = 0.0f;
-			if (currentAttack.soundFX != "None") {
-				gameManager.soundfx.gameObject.transform.FindChild (currentAttack.soundFX).GetComponent<AudioSource> ().Play ();
-			}
 			return true;
 		}
 		return false;
