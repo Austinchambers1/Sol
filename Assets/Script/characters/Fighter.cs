@@ -20,6 +20,9 @@ public class Fighter : MonoBehaviour {
 	bool hitboxCreated;
 	public bool reflectProj;
 	float maxStun;
+
+	float beatTime;
+
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
@@ -32,6 +35,7 @@ public class Fighter : MonoBehaviour {
 		foreach (AttackInfo a in at) {
 			attacks.Add (a.attackName, a);
 		}
+		beatTime = 60.0f / FindObjectOfType<BeatTracker> ().Tempo;
 	}
 
 	// Update is called once per frame
@@ -144,8 +148,8 @@ public class Fighter : MonoBehaviour {
 			hitboxCreated = false;
 			currentAttackName = attackName;
 			currentAttack = attacks[currentAttackName];
-			startUpTime = currentAttack.startUpTime;
-			recoveryTime = currentAttack.recoveryTime;
+			startUpTime = currentAttack.startUpTime * beatTime;
+			recoveryTime = currentAttack.recoveryTime * beatTime;
 			anim.SetInteger ("attack", currentAttack.animationID);
 			anim.speed = currentAttack.animSpeed;
 			movement.canMove = false;

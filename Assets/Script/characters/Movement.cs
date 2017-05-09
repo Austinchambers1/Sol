@@ -36,6 +36,7 @@ public class Movement : MonoBehaviour {
 		sprite = GetComponent<SpriteRenderer> ();
 		CalculateRaySpacing ();
 		canMove = true;
+		setFacingLeft (facingLeft);
 	}
 
 	public void Move(Vector2 velocity) {

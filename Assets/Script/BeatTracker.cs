@@ -41,7 +41,11 @@ public class BeatTracker : MonoBehaviour {
 			Vector3 temp = this.gameObject.transform.position;
 			temp.x = Random.value;
 			transform.position = temp;
-			BroadcastMessage ("reactToBeat", beatNo);
+			Beats [] beatL = FindObjectsOfType<Beats> ();
+			foreach (Beats b in beatL) { 
+				b.onBeat (beatNo);
+			}
+			//BroadcastMessage ("reactToBeat", beatNo);
 			Debug.Log (beatNo);
 		}
 	}
