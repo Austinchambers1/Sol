@@ -13,7 +13,7 @@ public class AttackInfo : MonoBehaviour {
 	public int animationID = 1;
 	public int recoveryAnimID = -1;
 	public float animSpeed = 1f;
-	public AudioSource soundFX;
+	public GameObject soundFX;
 	public string attackName = "default";
 	public float timeSinceStart = 0.0f;
 	public bool melee = true;
