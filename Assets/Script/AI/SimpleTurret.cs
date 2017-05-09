@@ -16,6 +16,7 @@ public class SimpleTurret : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		
 		currentInt = Mathf.Max (0.0f, currentInt - Time.deltaTime);
 		if (currentInt <= 0.0f) {
 			Debug.Log ("Beat");
