@@ -17,6 +17,10 @@ public class AttackIfClose : Beats {
 		followai = GetComponent<FollowPlayer> ();
 		movt = GetComponent<Movement> ();
 		inRange = false;
+		base.init ();
+	}
+	void OnDestroy() {
+		base.dest ();
 	}
 	
 	// Update is called once per frame

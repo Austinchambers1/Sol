@@ -14,7 +14,7 @@ public class AtkCounter : AttackInfo {
 		attackable = GetComponent<Attackable> ();
 		fighter = GetComponent<Fighter> ();
 	}
-	
+		
 	// Update is called once per frame
 	void Update () {}
 

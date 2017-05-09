@@ -10,7 +10,11 @@ public class SimpleBeatAtk : Beats {
 	Fighter mFighter;
 	// Use this for initialization
 	void Start () {
+		base.init ();
 		mFighter = GetComponent<Fighter> ();
+	}
+	void OnDestroy() {
+		base.dest ();
 	}
 
 	// Update is called once per frame

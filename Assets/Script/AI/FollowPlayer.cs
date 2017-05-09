@@ -41,6 +41,8 @@ public class FollowPlayer : MonoBehaviour {
 	public void moveToPlayer() {
 		inputX = 0.0f;
 		inputY = 0.0f;
+		if (followObj == null)
+			return;
 		float dist = Vector3.Distance (transform.position, followObj.transform.position);
 		if (controller.canMove && dist < maxDistance) {
 

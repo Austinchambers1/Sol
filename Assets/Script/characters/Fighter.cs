@@ -65,7 +65,7 @@ public class Fighter : MonoBehaviour {
 		if (currentAttackName != "none") {
 			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
 			if (hitboxCreated == false) {
-				if (startUpTime <= 0.0f) {
+				if (startUpTime <= (Time.deltaTime/2)) {
 					hitboxCreated = true;
 					currentAttack.onAttack ();
 					if (currentAttack.soundFX != null) {
@@ -92,7 +92,7 @@ public class Fighter : MonoBehaviour {
 					startUpTime = Mathf.Max (0.0f, startUpTime - Time.deltaTime);
 				}
 			} else {
-				if (recoveryTime <= 0.0f) {
+				if (recoveryTime <= Time.deltaTime/2.0f) {
 					endAttack ();
 
 				} else {
@@ -153,7 +153,7 @@ public class Fighter : MonoBehaviour {
 			hitboxCreated = false;
 			currentAttackName = attackName;
 			currentAttack = attacks[currentAttackName];
-			startUpTime = currentAttack.startUpTime * beatTime;
+			startUpTime = (currentAttack.startUpTime * beatTime) - (Time.deltaTime * 2);
 			recoveryTime = currentAttack.recoveryTime * beatTime;
 			anim.SetInteger ("attack", currentAttack.animationID);
 			anim.speed = currentAttack.animSpeed * animationRatio;
