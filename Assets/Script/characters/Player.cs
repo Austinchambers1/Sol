@@ -63,7 +63,7 @@ public class Player : MonoBehaviour {
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 
 		gameManager = FindObjectOfType<GameManager> ();
-		//lastHealth = GetComponent<Attackable> ().health;
+		//lastHealth = GetComponent<Attackable> ().health;		
 
 	}
 

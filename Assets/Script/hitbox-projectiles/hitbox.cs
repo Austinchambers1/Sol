@@ -12,6 +12,7 @@ public class hitbox : MonoBehaviour {
 	public string faction = "noFaction";
 	public GameObject followObj;
 	public GameObject creator;
+	public GameObject hitFX;
 	public bool toFollow = false;
 	public bool reflect = true;
 	public Vector2 followOffset;
@@ -77,6 +78,15 @@ public class hitbox : MonoBehaviour {
 			if (faction == "noFaction" || otherObj.faction == "noFaction" ||
 			    faction != otherObj.faction) {
 				otherObj.takeHit (this);
+				/*Vector3 newPos = new Vector3 ((other.transform.position.x + transform.position.x)/2f,
+					(other.transform.position.y + transform.position.y)/2f,
+						(other.transform.position.z + transform.position.z)/2f);*/
+				
+				GameObject fx = GameObject.Instantiate (hitFX, other.gameObject.transform.position,Quaternion.identity);
+				fx.GetComponent<Follow> ().followObj = other.gameObject;
+				float angle = (Mathf.Atan2 (knockback.y, knockback.x) * 180 )/ Mathf.PI;
+				Debug.Log (angle);
+				fx.transform.Rotate(new Vector3(0f,0f, angle));
 				if (creator) {
 					//Debug.Log ("Damage confirm");
 					if (creator.GetComponent<HitboxMaker> ()) {

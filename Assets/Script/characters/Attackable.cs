@@ -14,8 +14,14 @@ public class Attackable : MonoBehaviour {
 	public string faction = "noFaction";
 	public GameObject HitEffect;
 	public GameObject HealEffect;
+	public GameObject DeathEffect;
 	public float EnergyRegenRate = 10.0f;
 	public string mHitSound = "None";
+	public float deathTime = 0.0f;
+	public Color deathColor = new Color(0.0f,0.0f,0.0f);
+	float currDeathTime;
+	SpriteRenderer renderer;
+
 
 	public Dictionary<string,float> resistences = new Dictionary<string,float>();
 
@@ -24,19 +30,39 @@ public class Attackable : MonoBehaviour {
 	void Start () {
 		movementController = gameObject.GetComponent<Movement> ();
 		health = Mathf.Min (health, max_health);
-
+		currDeathTime = deathTime;
+		renderer = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		alive = transform.position.y >= bottomOfTheWorld && health > 0;
 		if (!alive && !immortal) {
-			if(gameObject.name.Contains("Enemy")) {
-				FindObjectOfType<GameManager>().soundfx.transform.FindChild ("EnemyDeath").GetComponent<AudioSource> ().Play ();
-			} else if(gameObject.name.Contains("Giant")) {
-				FindObjectOfType<GameManager>().soundfx.transform.FindChild ("GiantDeath").GetComponent<AudioSource> ().Play ();
+			if (currDeathTime > 0.0) {
+				if (currDeathTime == deathTime) {
+					Vector3 pos = new Vector3 (transform.position.x, transform.position.y, transform.position.z - 3);
+					GameObject deathfx = GameObject.Instantiate (DeathEffect, pos, Quaternion.identity);
+					deathfx.GetComponent<disappearing> ().duration = deathTime + 1.0f;
+					deathfx.GetComponent<Follow> ().followObj = gameObject;
+					deathfx.GetComponent<Follow> ().followOffset = new Vector3 (0.0f, 0.0f, -3.0f);
+					deathfx.GetComponent<Follow> ().toFollow = true;
+					ParticleSystem [] partsys = deathfx.GetComponentsInChildren<ParticleSystem> ();
+					foreach (ParticleSystem p in partsys) {
+						ParticleSystem.MainModule mainP = p.main;
+						mainP.startColor = deathColor;
+						mainP.startLifetime = deathTime + 1.0f;
+					}
+				}
+				renderer.color = Color.Lerp (Color.white, deathColor, (deathTime - currDeathTime) / deathTime);
+				currDeathTime -= Time.deltaTime;
+			} else {
+				if (gameObject.name.Contains ("Enemy")) {
+					FindObjectOfType<GameManager> ().soundfx.transform.FindChild ("EnemyDeath").GetComponent<AudioSource> ().Play ();
+				} else if (gameObject.name.Contains ("Giant")) {
+					FindObjectOfType<GameManager> ().soundfx.transform.FindChild ("GiantDeath").GetComponent<AudioSource> ().Play ();
+				}
+				Destroy (gameObject);
 			}
-			Destroy (gameObject);
 		}
 		modifyEnergy(EnergyRegenRate * Time.deltaTime);
 		foreach (string k in resistences.Keys) {

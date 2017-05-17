@@ -31,6 +31,8 @@ public class AttackIfClose : Beats {
 			} else {
 				inRange = false;
 			}
+		} else {
+			inRange = false;
 		}
 	}
 

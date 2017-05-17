@@ -13,6 +13,7 @@ public class Fighter : MonoBehaviour {
 	string myFac;
 	Movement movement;
 	Animator anim;
+	Attackable attackable;
 	GameManager gameManager;
 	HitboxMaker hbm;
 	AttackInfo currentAttack;
@@ -29,6 +30,7 @@ public class Fighter : MonoBehaviour {
 		anim = GetComponent<Animator> ();
 		movement = GetComponent<Movement> ();
 		gameManager = FindObjectOfType<GameManager> ();
+		attackable = GetComponent<Attackable> ();
 		myFac = gameObject.GetComponent<Attackable> ().faction;
 		hbm = GetComponent<HitboxMaker> ();
 		endAttack ();
@@ -53,14 +55,16 @@ public class Fighter : MonoBehaviour {
 				anim.SetBool ("tryingToMove", true);
 			}
 		}
-		if (stunTime > 0.0f) {
+		if (stunTime > 0.0f ) {
 			if (stunTime != maxStun) {
 				anim.SetBool ("hitInit", false);
 			}
 			stunTime = Mathf.Max (0.0f, stunTime - Time.deltaTime);
-			if (stunTime == 0.0f) {
+			if (stunTime == 0.0f && attackable.alive) {
 				endStun ();
 			}
+		}else if (!attackable.alive) {
+			startHitState (10.0f);
 		}
 		if (currentAttackName != "none") {
 			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
@@ -70,6 +74,26 @@ public class Fighter : MonoBehaviour {
 					currentAttack.onAttack ();
 					if (currentAttack.soundFX != null) {
 						currentAttack.soundFX.Play ();
+					}
+					if (currentAttack.attackFX) {
+						Debug.Log ("Creating effect");
+						GameObject fx = GameObject.Instantiate (currentAttack.attackFX, transform);
+						fx.GetComponent<disappearing> ().duration = currentAttack.recoveryTime;
+
+						fx.GetComponent<disappearing> ().toDisappear = true;
+						fx.GetComponent<Follow> ().followObj = gameObject;
+						fx.GetComponent<Follow> ().followOffset = new Vector3 (0.0f, 0.0f, -3.0f);
+						fx.GetComponent<Follow> ().toFollow = true;
+						if (movement.facingLeft) {
+							fx.transform.Rotate (new Vector3 (0f, 180f,0f));
+						}
+
+						ParticleSystem [] partsys = fx.GetComponentsInChildren<ParticleSystem> ();
+						foreach (ParticleSystem p in partsys) {
+							ParticleSystem.MainModule mainP = p.main;
+							//mainP.startColor = currentAttack.attackPrimaryColor;
+							mainP.startLifetime = currentAttack.recoveryTime + 0.2f;
+						}
 					}
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
@@ -107,17 +131,19 @@ public class Fighter : MonoBehaviour {
 
 	public void registerStun(float st, bool defaultStun,hitbox hb) {
 		if (defaultStun) {
-			anim.SetBool ("hit", true);
-			anim.SetBool ("hitInit", true);
-			endAttack ();
-			stunTime = st;
-			maxStun = st;
-			movement.canMove = false;
-
+			startHitState (st);
 		}
 		if (currentAttack != null) {
 			currentAttack.onInterrupt (stunTime,defaultStun,hb);
 		}
+	}
+	void startHitState(float st) {
+		anim.SetBool ("hit", true);
+		anim.SetBool ("hitInit", true);
+		endAttack ();
+		stunTime = st;
+		maxStun = st;
+		movement.canMove = false;
 	}
 	public void registerHit(GameObject otherObj) {
 		if (currentAttack != null) {
@@ -126,12 +152,14 @@ public class Fighter : MonoBehaviour {
 	}
 
 	public void endStun() {
-		anim.SetBool ("hit", false);
-		anim.SetBool ("hitInit", false);
-		movement.canMove = true;
-		hbm.clearAttrs ();
-		stunTime = 0.0f;
-		maxStun = 0.0f;
+		if (attackable.alive) {
+			anim.SetBool ("hit", false);
+			anim.SetBool ("hitInit", false);
+			movement.canMove = true;
+			hbm.clearAttrs ();
+			stunTime = 0.0f;
+			maxStun = 0.0f;
+		}
 	}
 	public void endAttack() {
 		if (currentAttack != null) {

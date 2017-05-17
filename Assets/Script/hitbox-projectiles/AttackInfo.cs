@@ -18,6 +18,9 @@ public class AttackInfo : MonoBehaviour {
 	public float timeSinceStart = 0.0f;
 	public bool melee = true;
 	public bool createHitbox = true;
+	public GameObject attackFX;
+	//public Color attackPrimaryColor = new Color(0.0f,0.0f,0.0f);
+	//public Color attackSecondaryColor= new Color(0.0f,0.0f,0.0f);
 	protected Fighter fighter;
 	protected Attackable attackable;
 

@@ -13,7 +13,7 @@ public class Beats : MonoBehaviour {
 	}
 	protected void dest() {
 		Debug.Log ("destroy beats");
-		FindObjectOfType<BeatTracker> ().removeBeatObj (this);
+		//FindObjectOfType<BeatTracker> ().removeBeatObj (this);
 	}
 	
 	// Update is called once per frame
