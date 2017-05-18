@@ -33,7 +33,7 @@ public class AtkSolUpAir : AtkDash {
 		} else if (timeSinceAttack > 0.4f && numHits == 2) {
 			numHits = 3;
 			HitboxMaker hbm = GetComponent<HitboxMaker> ();
-			Vector2 realKB = new Vector2(10f,20f);
+			Vector2 realKB = new Vector2(10f,18f);
 			Vector2 realOff = new Vector2(1.5f,-0.5f);
 			if (GetComponent<Movement> ().facingLeft) {
 				realOff.x = realOff.x * -1f;
