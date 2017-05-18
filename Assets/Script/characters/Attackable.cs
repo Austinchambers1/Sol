@@ -65,15 +65,22 @@ public class Attackable : MonoBehaviour {
 			}
 		}
 		modifyEnergy(EnergyRegenRate * Time.deltaTime);
-		foreach (string k in resistences.Keys) {
+		List<string> keys = new List<string> (resistences.Keys);
+//		ArrayList toRemove = new ArrayList();
+		foreach (string k in keys) {
 			//Debug.Log ("key: " + k + " time: " + resistences [k]);
 			float time = resistences [k] - Time.deltaTime;
 			resistences [k] = time;
 			if (resistences [k] <= 0.0f) {
 				//Debug.Log ("removing resistance for" + k);
+//				resistences.Remove (k);
+
 				resistences.Remove (k);
 			}
 		}
+//		foreach (string k in toRemove) {
+//			resistences.Remove(k);
+//		}
 	}
 
 	public void addResistence(string attribute, float time) {

@@ -19,12 +19,12 @@ public class AtkCounter : AttackInfo {
 	void Update () {}
 
 	public override void onAttack() {
-		Debug.Log ("adding resistance");
+//		Debug.Log ("adding resistance");
 		attackable.addResistence (resistanceType, resistanceTime);
 	}
 
 	public override void onInterrupt(float stunTime, bool successfulHit, hitbox hb) {
-		Debug.Log ("on Interrupt");
+//		Debug.Log ("on Interrupt");
 		if (counterAttack && !successfulHit && timeSinceStart > startUpTime && timeSinceStart < (startUpTime + resistanceTime)) {
 			fighter.endAttack ();
 			fighter.tryAttack (counterAttackType);

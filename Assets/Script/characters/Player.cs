@@ -108,14 +108,17 @@ public class Player : MonoBehaviour {
 		inputX = 0.0f;
 		inputY = 0.0f;
 		controller.setGravityScale(gravity);
-		if (controller.canMove) {
-			if (Input.GetKey(upKey) || Input.GetKey(downKey) || Input.GetKeyDown(attackKey) || Input.GetKeyDown(reflectKey) || Input.GetKeyDown(attackKey) || Input.GetKeyDown(guardKey)) {
-				if (gameManager.checkOnBeat()) {
-					Debug.Log ("On beat!");
-				} else {
-					Debug.Log("Off beat!");
-				}
+
+		if (Input.GetKeyDown(attackKey) || Input.GetKeyDown(reflectKey) || Input.GetKeyDown(guardKey)) {
+			Debug.Log ("buttonpress");
+			if (gameManager.checkOnBeat()) {
+				Debug.Log ("On beat!");
+			} else {
+				Debug.Log("Off beat!");
 			}
+		}
+
+		if (controller.canMove) {
 
 			if (Input.GetKey (upKey)) {
 				inputY = 1.0f;
