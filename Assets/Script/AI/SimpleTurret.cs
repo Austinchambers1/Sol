@@ -19,7 +19,7 @@ public class SimpleTurret : MonoBehaviour {
 		
 		currentInt = Mathf.Max (0.0f, currentInt - Time.deltaTime);
 		if (currentInt <= 0.0f) {
-			Debug.Log ("Beat");
+//			Debug.Log ("Beat");
 			b.onBeat (1);
 			currentInt = interval;
 		}

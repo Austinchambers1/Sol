@@ -65,7 +65,7 @@ public class hitbox : MonoBehaviour {
 	}
 	internal void OnTriggerEnter2D(Collider2D other)
 	{
-		Debug.Log (other.gameObject.GetComponent<Attackable> () );
+//		Debug.Log (other.gameObject.GetComponent<Attackable> () );
 		if (reflect && other.gameObject.GetComponent<Projectile> () && creator) {
 			creator.GetComponent<HitboxMaker> ().registerHit (other.gameObject);
 		}

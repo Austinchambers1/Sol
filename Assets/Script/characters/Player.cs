@@ -109,6 +109,14 @@ public class Player : MonoBehaviour {
 		inputY = 0.0f;
 		controller.setGravityScale(gravity);
 		if (controller.canMove) {
+			if (Input.GetKey(upKey) || Input.GetKey(downKey) || Input.GetKeyDown(attackKey) || Input.GetKeyDown(reflectKey) || Input.GetKeyDown(attackKey) || Input.GetKeyDown(guardKey)) {
+				if (gameManager.checkOnBeat()) {
+					Debug.Log ("On beat!");
+				} else {
+					Debug.Log("Off beat!");
+				}
+			}
+
 			if (Input.GetKey (upKey)) {
 				inputY = 1.0f;
 			} else if (Input.GetKey (downKey)) {

@@ -62,7 +62,4 @@ public class BeatTracker : MonoBehaviour {
 			nextFrame = true;
 		}
 	}
-
-
-
 }
