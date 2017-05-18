@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour {
 
 //	public float startX; // used by PlayerCursor for deadZone
 
+	public float allowableError;
+	private BeatTracker beatTracker = null;
+
 	void Awake () {
 //		Debug.Log ("Awake");
 //		if (instance == null)
@@ -118,6 +121,10 @@ public class GameManager : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
+		if (beatTracker == null) {
+			beatTracker = FindObjectOfType<BeatTracker> ();
+		}
+
 		if (!gameStarted && Time.time - startTime >= introTime) {
 			startGame ();
 		}
@@ -174,5 +181,10 @@ public class GameManager : MonoBehaviour {
 		foreach (Spawnable enemy in FindObjectsOfType<Spawnable>()) {
 			Destroy (enemy.gameObject);
 		}
+	}
+
+	public bool checkOnBeat(float time = -1) {
+		if (time < 0) time = Time.time;
+		return (Mathf.Abs (beatTracker.QuarterNoteActionTime - time) < allowableError);
 	}
 }

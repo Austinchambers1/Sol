@@ -8,11 +8,11 @@ public class Beats : MonoBehaviour {
 	void Start () {}
 
 	protected void init() {
-		Debug.Log ("start beats");
+//		Debug.Log ("start beats");
 		FindObjectOfType<BeatTracker> ().addBeatObj (this);
 	}
 	protected void dest() {
-		Debug.Log ("destroy beats");
+//		Debug.Log ("destroy beats");
 		//FindObjectOfType<BeatTracker> ().removeBeatObj (this);
 	}
 	
