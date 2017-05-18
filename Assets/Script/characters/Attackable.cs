@@ -65,14 +65,22 @@ public class Attackable : MonoBehaviour {
 			}
 		}
 		modifyEnergy(EnergyRegenRate * Time.deltaTime);
-		foreach (string k in resistences.Keys) {
+		Dictionary<string,float>.KeyCollection keys = resistences.Keys;
+		ArrayList toRemove = new ArrayList();
+		foreach (string k in keys) {
 			//Debug.Log ("key: " + k + " time: " + resistences [k]);
 			float time = resistences [k] - Time.deltaTime;
 			resistences [k] = time;
 			if (resistences [k] <= 0.0f) {
 				//Debug.Log ("removing resistance for" + k);
-				resistences.Remove (k);
+//				resistences.Remove (k);
+
+				// BUG! You can't modify resistences while you're iterating through it!
+				toRemove.Add (k);
 			}
+		}
+		foreach (string k in toRemove) {
+			resistences.Remove(k);
 		}
 	}
 

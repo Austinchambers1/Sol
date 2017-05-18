@@ -85,7 +85,7 @@ public class hitbox : MonoBehaviour {
 				GameObject fx = GameObject.Instantiate (hitFX, other.gameObject.transform.position,Quaternion.identity);
 				fx.GetComponent<Follow> ().followObj = other.gameObject;
 				float angle = (Mathf.Atan2 (knockback.y, knockback.x) * 180 )/ Mathf.PI;
-				Debug.Log (angle);
+//				Debug.Log (angle);
 				fx.transform.Rotate(new Vector3(0f,0f, angle));
 				if (creator) {
 					//Debug.Log ("Damage confirm");

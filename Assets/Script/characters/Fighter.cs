@@ -36,7 +36,8 @@ public class Fighter : MonoBehaviour {
 		endAttack ();
 		AttackInfo[] at = gameObject.GetComponents<AttackInfo> ();
 		foreach (AttackInfo a in at) {
-			attacks.Add (a.attackName, a);
+			if (!attacks.ContainsKey(a.attackName))
+				attacks.Add (a.attackName, a);
 		}
 		beatTime = 60.0f / FindObjectOfType<BeatTracker> ().Tempo;
 		animationRatio = FindObjectOfType<BeatTracker> ().Tempo / 100.0f;
@@ -78,7 +79,7 @@ public class Fighter : MonoBehaviour {
 						currentAttack.soundFX.Play ();
 					}
 					if (currentAttack.attackFX) {
-						Debug.Log ("Creating effect");
+//						Debug.Log ("Creating effect");
 						GameObject fx = GameObject.Instantiate (currentAttack.attackFX, transform);
 						fx.GetComponent<disappearing> ().duration = currentAttack.recoveryTime;
 
