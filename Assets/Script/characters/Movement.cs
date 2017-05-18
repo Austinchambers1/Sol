@@ -40,7 +40,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	public void Move(Vector2 velocity) {
-		Move (velocity, Vector2.zero);
+		//Move (velocity, Vector2.zero);
 	}
 
 	public void setGravityScale(float gravScale) {
@@ -77,9 +77,12 @@ public class Movement : MonoBehaviour {
 		timeForces.Add (duration);
 	}
 
-	public void Move(Vector2 veloc, Vector2 input) {
+	public Vector2 Move(Vector2 veloc, Vector2 input) {
 		//Debug.Log ("----");
 		//Debug.Log (veloc.y);
+		Debug.Log("Move veloc: " + veloc);
+		Debug.Log("in Move: " + gravityScale * Time.deltaTime);
+		veloc.y += gravityScale * Time.deltaTime;
 		if (!canMove) {
 			input = Vector2.zero;
 		}
@@ -90,9 +93,13 @@ public class Movement : MonoBehaviour {
 		//Debug.Log (velocity.y);
 		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
 		velocity.y += (accumulatedVelocity.y * Time.deltaTime);
+		bool noY = true;
 
 		for (int i = CharForces.Count - 1; i >= 0; i--) {
 			Vector2 selfVec = CharForces [i];
+			if (selfVec.y != 0f) {
+				noY = false;
+			}
 			velocity += (selfVec * Time.deltaTime);
 			timeForces [i] = timeForces [i] - Time.deltaTime;
 			if (timeForces [i] < 0f) {
@@ -100,6 +107,9 @@ public class Movement : MonoBehaviour {
 				timeForces.RemoveAt (i);
 			}
 		}
+		//if (noY) {
+			
+		//}
 		//Debug.Log (velocity.y);
 		UpdateRaycastOrigins ();
 		collisions.Reset ();
@@ -114,6 +124,7 @@ public class Movement : MonoBehaviour {
 
 		transform.Translate (velocity);
 		speed = Mathf.Abs(velocity.x);
+		return veloc / Time.deltaTime;
 	}
 
 	void HorizontalCollisions(ref Vector2 velocity) {
@@ -154,6 +165,7 @@ public class Movement : MonoBehaviour {
 				}
 			}
 		}
+
 	}
 	
 	void VerticalCollisions(ref Vector2 velocity) {

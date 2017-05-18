@@ -18,7 +18,7 @@ public class EnergyPack : MonoBehaviour {
 			velocity.y = 0.0f;
 		}
 		velocity.y += -movement.gravityScale * Time.deltaTime;
-		movement.Move (velocity,Vector2.zero);
+		//movement.Move (velocity,Vector2.zero);
 	}
 
 	internal void OnTriggerEnter2D(Collider2D other)

@@ -71,6 +71,7 @@ public class Fighter : MonoBehaviour {
 			if (hitboxCreated == false) {
 				if (startUpTime <= (Time.deltaTime/2)) {
 					hitboxCreated = true;
+					anim.SetInteger ("attack", currentAttack.animationID);
 					currentAttack.onAttack ();
 					if (currentAttack.soundFX != null) {
 						currentAttack.soundFX.Play ();
