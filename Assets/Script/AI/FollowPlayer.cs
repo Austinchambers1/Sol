@@ -64,9 +64,9 @@ public class FollowPlayer : MonoBehaviour {
 		if (controller.canMove && (controller.falling == "left" || controller.falling == "right") && controller.collisions.below) {
 			velocity.y = jumpVelocity;
 		}
-		velocity.y += gravity * Time.deltaTime;
+		//velocity.y += gravity * Time.deltaTime;
 
-		controller.Move (velocity, input);
+		velocity = controller.Move (velocity, input);
 	}
 
 	// Update is called once per frame

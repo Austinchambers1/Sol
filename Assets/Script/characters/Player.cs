@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
 
 	float gravity;
 	float jumpVelocity;
-	Vector3 velocity;
+	Vector2 velocity;
 	float velocityXSmoothing;
 
 	//controls
@@ -126,17 +126,6 @@ public class Player : MonoBehaviour {
 			} else {
 				attemptingInteraction = false;
 			}
-			//Attack/Reflect/Guard Animations
-			if (Input.GetKeyDown (attackKey)) {
-				gameObject.GetComponent<Fighter> ().tryAttack ("attack");
-			}
-			if (Input.GetKeyDown (reflectKey)) {
-				gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
-			}
-			if (Input.GetKeyDown (guardKey)) {
-				gameObject.GetComponent<Fighter> ().tryAttack ("guard");
-			}
-
 			//Movement controls
 			if (Input.GetKey (leftKey)) { 
 				anim.SetBool ("tryingToMove", true);
@@ -147,6 +136,27 @@ public class Player : MonoBehaviour {
 				inputX = 1.0f; 
 				controller.setFacingLeft (false);
 			}
+			//Attack/Reflect/Guard Animations
+			if (Input.GetKeyDown (attackKey)) {
+				if (Input.GetKey (downKey)) {
+					Debug.Log ("trying down");
+					gameObject.GetComponent<Fighter> ().tryAttack ("down");
+				} else if (Input.GetKey (upKey)) {
+					gameObject.GetComponent<Fighter> ().tryAttack ("up");
+				}else if (Input.GetKey (leftKey) || Input.GetKey (rightKey)) {
+					gameObject.GetComponent<Fighter> ().tryAttack ("dash");
+				} else {
+					gameObject.GetComponent<Fighter> ().tryAttack ("attack");
+				}
+			}
+			if (Input.GetKeyDown (reflectKey)) {
+				gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
+			}
+			if (Input.GetKeyDown (guardKey)) {
+				gameObject.GetComponent<Fighter> ().tryAttack ("guard");
+			}
+
+			
 			if (Input.GetKeyDown (jumpKey)) {
 				if (controller.collisions.below) {
 					velocity.y = jumpVelocity;
@@ -164,8 +174,10 @@ public class Player : MonoBehaviour {
 		float targetVelocityX = inputX * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 		Vector2 input = new Vector2 (inputX, inputY);
-		velocity.y += gravity * Time.deltaTime;
-		controller.Move (velocity, input);
+		//velocity.y += gravity * Time.deltaTime;
+		//Debug.Log("inPlayer: " + gravity * Time.deltaTime);
+		Debug.Log("Player veloc: " + velocity);
+		velocity = controller.Move (velocity, input);
 		if (!attackable.alive) {
 			//gameManager.gameOver = true;
 			//gameManager.winner = 2;
