@@ -110,7 +110,6 @@ public class Player : MonoBehaviour {
 		controller.setGravityScale(gravity);
 
 		if (Input.GetKeyDown(attackKey) || Input.GetKeyDown(reflectKey) || Input.GetKeyDown(guardKey)) {
-			Debug.Log ("buttonpress");
 			if (gameManager.checkOnBeat()) {
 				Debug.Log ("On beat!");
 			} else {

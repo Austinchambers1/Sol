@@ -185,6 +185,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool checkOnBeat(float time = -1) {
 		if (time < 0) time = Time.time;
-		return (Mathf.Abs (beatTracker.QuarterNoteActionTime - time) < allowableError);
+		float t = Mathf.Abs (beatTracker.QuarterNoteActionTime - time);
+		return (t < allowableError || Mathf.Abs(0.5f-t) < allowableError);
 	}
 }
