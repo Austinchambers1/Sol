@@ -62,19 +62,16 @@ public class FollowPlayer : MonoBehaviour {
 		Vector2 input = new Vector2 (inputX, inputY);
 
 		if (controller.canMove && (controller.falling == "left" || controller.falling == "right") && controller.collisions.below) {
-			velocity.y = jumpVelocity;
+			//velocity.y = jumpVelocity;
+			controller.addSelfForce (new Vector2 (0f, jumpVelocity), 0f);
 		}
 		//velocity.y += gravity * Time.deltaTime;
 
-		velocity = controller.Move (velocity, input);
+		controller.Move (velocity, input);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (controller.collisions.above || controller.collisions.below) {
-			velocity.y = 0.0f;
-		}
 		moveToPlayer ();
-
 	}
 }

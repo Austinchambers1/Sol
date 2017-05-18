@@ -39,8 +39,12 @@ public class AttackInfo : MonoBehaviour {
 
 	public virtual void onAttack() {}
 
-	public virtual void onConclude() {
-	}
+	public virtual void onConclude() {}
+
+	public virtual void startUpTick() {}
+
+	public virtual void recoveryTick() {}
+
 	public virtual void onHitConfirm(GameObject other) {
 	}
 	public virtual void onInterrupt(float stunTime, bool successfulHit, hitbox hb) {

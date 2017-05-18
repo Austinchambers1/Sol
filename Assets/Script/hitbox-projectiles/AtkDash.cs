@@ -13,12 +13,13 @@ public class AtkDash : AttackInfo {
 	Movement movement;
 	// Use this for initialization
 	void Start () {
-		movement = GetComponent<Movement> ();
+		
 	}	
 	// Update is called once per frame
 	void Update () {}
 
 	public override void onStartUp() {
+		movement = GetComponent<Movement> ();
 		if (!movement.facingLeft) {
 			movement.addSelfForce (startUpDash, startUpDuration);
 		} else {

@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour {
 	public float speed;
 	public bool facingLeft = false;
 	public bool canMove = true;
+	public float terminalVelocity = -0.5f;
 
 	float maxClimbAngle = 80;
 
@@ -30,6 +31,7 @@ public class Movement : MonoBehaviour {
 	List<Vector2> CharForces = new List<Vector2>();
 	List<float> timeForces = new List<float>();
 	public bool onGround = true;
+	Vector2 playerForce = new Vector2();
 
 	void Start() {
 		bCollider = GetComponent<BoxCollider2D> ();
@@ -44,7 +46,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	public void setGravityScale(float gravScale) {
-		gravityScale = gravScale;
+		gravityScale = gravScale * Time.deltaTime;
 	}
 
 	void Update() {
@@ -63,42 +65,25 @@ public class Movement : MonoBehaviour {
 		} else {
 			accumulatedVelocity.y = 0f; //(1f - Time.deltaTime * 2.0f);
 		}
-
+		processMovement ();
 	}
 
-	public void addToVelocity(Vector2 veloc )
-	{
-		//Debug.Log ("beforeVel: " + accumulatedVelocity);
-		accumulatedVelocity += veloc;
-		//Debug.Log ("accumulatedVel: " + accumulatedVelocity);
-	}
-	public void addSelfForce(Vector2 force, float duration) {
-		CharForces.Add (force);
-		timeForces.Add (duration);
-	}
-
-	public Vector2 Move(Vector2 veloc, Vector2 input) {
-		//Debug.Log ("----");
-		//Debug.Log (veloc.y);
-		Debug.Log("Move veloc: " + veloc);
-		Debug.Log("in Move: " + gravityScale * Time.deltaTime);
-		veloc.y += gravityScale * Time.deltaTime;
+	void processMovement() {
 		if (!canMove) {
-			input = Vector2.zero;
+			playerInput = Vector2.zero;
 		}
+		if (collisions.above || collisions.below){
+			velocity.y = 0.0f;
+		}  
+		playerForce = playerForce * Time.deltaTime;
 
-		veloc = veloc * Time.deltaTime;
-		velocity.x = veloc.x;
-		velocity.y = veloc.y;
-		//Debug.Log (velocity.y);
-		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
-		velocity.y += (accumulatedVelocity.y * Time.deltaTime);
-		bool noY = true;
+		velocity.x = playerForce.x;
+		bool Yf = true;
 
 		for (int i = CharForces.Count - 1; i >= 0; i--) {
 			Vector2 selfVec = CharForces [i];
 			if (selfVec.y != 0f) {
-				noY = false;
+				velocity.y = 0f;
 			}
 			velocity += (selfVec * Time.deltaTime);
 			timeForces [i] = timeForces [i] - Time.deltaTime;
@@ -107,14 +92,15 @@ public class Movement : MonoBehaviour {
 				timeForces.RemoveAt (i);
 			}
 		}
-		//if (noY) {
-			
-		//}
-		//Debug.Log (velocity.y);
+		if (Yf && velocity.y > terminalVelocity){
+			velocity.y += gravityScale * Time.deltaTime;
+		}
+		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
+		velocity.y += (accumulatedVelocity.y * Time.deltaTime);
+
 		UpdateRaycastOrigins ();
 		collisions.Reset ();
-		playerInput = input;
-	
+
 		if (velocity.x != 0) {
 			HorizontalCollisions (ref velocity);
 		}
@@ -124,7 +110,21 @@ public class Movement : MonoBehaviour {
 
 		transform.Translate (velocity);
 		speed = Mathf.Abs(velocity.x);
-		return veloc / Time.deltaTime;
+	}
+
+	public void addToVelocity(Vector2 veloc )
+	{
+		accumulatedVelocity.x += veloc.x;
+		addSelfForce (new Vector2 (0f, veloc.y), 0f);
+	}
+	public void addSelfForce(Vector2 force, float duration) {
+		CharForces.Add (force);
+		timeForces.Add (duration);
+	}
+
+	public void Move(Vector2 veloc, Vector2 input) {
+		playerInput = input;
+		playerForce = veloc;
 	}
 
 	void HorizontalCollisions(ref Vector2 velocity) {

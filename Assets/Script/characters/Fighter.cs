@@ -70,6 +70,7 @@ public class Fighter : MonoBehaviour {
 			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
 			if (hitboxCreated == false) {
 				if (startUpTime <= (Time.deltaTime/2)) {
+					currentAttack.startUpTick ();
 					hitboxCreated = true;
 					anim.SetInteger ("attack", currentAttack.animationID);
 					currentAttack.onAttack ();
@@ -121,6 +122,7 @@ public class Fighter : MonoBehaviour {
 					endAttack ();
 
 				} else {
+					currentAttack.recoveryTick ();
 					recoveryTime = Mathf.Max (0.0f, recoveryTime - Time.deltaTime);
 				}
 			}

@@ -32,9 +32,9 @@ public class AtkReflector : AttackInfo {
 			//Debug.Log ("new: " + hb.faction);
 			hb.hitboxDuration = Mathf.Min(Mathf.Max(0.5f,hb.hitboxDuration),2.0f) * 4.0f;
 			p.duration = hb.hitboxDuration;
-			if (rapidRecovery) {
-				GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
-			}
+		}
+		if (rapidRecovery) {
+			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
 		}
 	}
 }

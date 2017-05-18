@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
 	float gravity;
 	float jumpVelocity;
 	Vector2 velocity;
+	Vector2 jumpVector;
 	float velocityXSmoothing;
 
 	//controls
@@ -48,6 +49,8 @@ public class Player : MonoBehaviour {
 	public float inputX = 0.0f;
 	public float inputY = 0.0f;
 	public float dashSpeed = 20f;
+	bool isJump;
+	float jumpPersist = 0.0f;
 	float timeSinceLastDash = 0.0f;
 
 	//public float lastHealth;
@@ -59,9 +62,9 @@ public class Player : MonoBehaviour {
 		Fighter f = GetComponent<Fighter> ();
 		Reset ();
 		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
-		controller.setGravityScale(gravity);
+		controller.setGravityScale (gravity);
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-
+		jumpVector = new Vector2 (0f, jumpVelocity);
 		gameManager = FindObjectOfType<GameManager> ();
 		//lastHealth = GetComponent<Attackable> ().health;		
 
@@ -100,12 +103,11 @@ public class Player : MonoBehaviour {
 			gameManager.soundfx.gameObject.transform.FindChild ("P1Dash").GetComponent<AudioSource> ().Play ();
 		}
 
-		if (controller.collisions.above || controller.collisions.below) {velocity.y = 0.0f;}
 		if (controller.onGround) {canDoubleJump = true;}
 
 		inputX = 0.0f;
 		inputY = 0.0f;
-
+		controller.setGravityScale(gravity);
 		if (controller.canMove) {
 			if (Input.GetKey (upKey)) {
 				inputY = 1.0f;
@@ -131,10 +133,17 @@ public class Player : MonoBehaviour {
 			//Attack/Reflect/Guard Animations
 			if (Input.GetKeyDown (attackKey)) {
 				if (Input.GetKey (downKey)) {
-					Debug.Log ("trying down");
-					gameObject.GetComponent<Fighter> ().tryAttack ("down");
+					if (controller.onGround) {
+						gameObject.GetComponent<Fighter> ().tryAttack ("down");
+					} else {
+						gameObject.GetComponent<Fighter> ().tryAttack ("airdown");
+					}
 				} else if (Input.GetKey (upKey)) {
-					gameObject.GetComponent<Fighter> ().tryAttack ("up");
+					if (controller.onGround) {
+						gameObject.GetComponent<Fighter> ().tryAttack ("up");
+					} else {
+						gameObject.GetComponent<Fighter> ().tryAttack ("airup");
+					}
 				}else if (Input.GetKey (leftKey) || Input.GetKey (rightKey)) {
 					gameObject.GetComponent<Fighter> ().tryAttack ("dash");
 				} else {
@@ -151,16 +160,39 @@ public class Player : MonoBehaviour {
 			
 			if (Input.GetKeyDown (jumpKey)) {
 				if (controller.collisions.below) {
-					velocity.y = jumpVelocity;
+					//velocity.y = jumpVelocity;
+					//controller.velocity.y = jumpVelocity * Time.deltaTime;
+					controller.addSelfForce (jumpVector, 0f);
+					jumpPersist = 0.2f;
 					gameManager.soundfx.gameObject.transform.FindChild ("P1Jump").GetComponent<AudioSource> ().Play ();
+					isJump = true;
 				} else if (canDoubleJump && attackable.energy >= P1AbilityCost) {
-					velocity.y = jumpVelocity;
+					velocity.y = jumpVelocity;// * Time.deltaTime;
+					isJump = false;
+					controller.addSelfForce (jumpVector, 0f);
+					//controller.velocity.y = jumpVelocity * Time.deltaTime;
+					//controller.addSelfForce (jumpVector,0f);
+
 					gameManager.soundfx.gameObject.transform.FindChild ("P1Jump").GetComponent<AudioSource> ().Play ();
 					canDoubleJump = false;
 					attackable.energy = attackable.energy - P1AbilityCost;
 				}
 			}
+			if (Input.GetKey (jumpKey) && isJump && controller.velocity.y > 0f) {
+				controller.setGravityScale (gravity * 0.8f);
+			}
 		}
+		/*
+		if (jumpPersist > 0f) {
+			if (Input.GetKey (jumpKey)) {
+				if (jumpPersist > 0.01f) {
+					controller.addSelfForce (jumpVector * jumpPersist, 0f);
+				}
+				jumpPersist = jumpPersist * 0.95f;
+			} else {
+				jumpPersist = 0f;
+			}
+		}*/
 
 		//Movement logic
 		float targetVelocityX = inputX * moveSpeed;
@@ -168,8 +200,7 @@ public class Player : MonoBehaviour {
 		Vector2 input = new Vector2 (inputX, inputY);
 		//velocity.y += gravity * Time.deltaTime;
 		//Debug.Log("inPlayer: " + gravity * Time.deltaTime);
-		Debug.Log("Player veloc: " + velocity);
-		velocity = controller.Move (velocity, input);
+		controller.Move (velocity, input);
 		if (!attackable.alive) {
 			//gameManager.gameOver = true;
 			//gameManager.winner = 2;
