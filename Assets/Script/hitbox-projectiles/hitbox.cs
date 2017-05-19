@@ -13,6 +13,7 @@ public class hitbox : MonoBehaviour {
 	public GameObject followObj;
 	public GameObject creator;
 	public GameObject hitFX;
+	public GameObject blockFX;
 	public bool toFollow = false;
 	public bool reflect = true;
 	public Vector2 followOffset;
@@ -26,6 +27,9 @@ public class hitbox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		updateTick ();
+	}
+	public void updateTick() {
 		if (hitboxDuration > 0.0f && timedHitbox) {
 			hitboxDuration = hitboxDuration - Time.deltaTime;
 		} else {
@@ -77,15 +81,15 @@ public class hitbox : MonoBehaviour {
 			Attackable otherObj = other.gameObject.GetComponent<Attackable> ();
 			if (faction == "noFaction" || otherObj.faction == "noFaction" ||
 			    faction != otherObj.faction) {
-				otherObj.takeHit (this);
-				/*Vector3 newPos = new Vector3 ((other.transform.position.x + transform.position.x)/2f,
-					(other.transform.position.y + transform.position.y)/2f,
-						(other.transform.position.z + transform.position.z)/2f);*/
-				
-				GameObject fx = GameObject.Instantiate (hitFX, other.gameObject.transform.position,Quaternion.identity);
+				string hitType = otherObj.takeHit (this);
+				GameObject fx;
+				if (hitType == "block") {
+					fx = GameObject.Instantiate (blockFX, other.gameObject.transform.position, Quaternion.identity);
+				} else {
+					fx = GameObject.Instantiate (hitFX, other.gameObject.transform.position, Quaternion.identity);
+				}
 				fx.GetComponent<Follow> ().followObj = other.gameObject;
 				float angle = (Mathf.Atan2 (knockback.y, knockback.x) * 180 )/ Mathf.PI;
-//				Debug.Log (angle);
 				fx.transform.Rotate(new Vector3(0f,0f, angle));
 				if (creator) {
 					//Debug.Log ("Damage confirm");

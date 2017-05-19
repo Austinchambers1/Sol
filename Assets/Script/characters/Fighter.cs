@@ -19,6 +19,7 @@ public class Fighter : MonoBehaviour {
 	AttackInfo currentAttack;
 	public string currentAttackName;
 	bool hitboxCreated;
+	bool onBeat;
 	public bool reflectProj;
 	float maxStun;
 
@@ -45,17 +46,7 @@ public class Fighter : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		anim.SetBool ("tryingToMove", false);
-		anim.SetBool ("grounded", movement.collisions.below);
-		if (GetComponent<FollowPlayer> ()) {
-			if (GetComponent<FollowPlayer> ().inputX != 0.0f) {
-				anim.SetBool ("tryingToMove", true);
-			}
-		} else if (GetComponent<Player> ()) {
-			if (GetComponent<Player> ().inputX != 0.0f) {
-				anim.SetBool ("tryingToMove", true);
-			}
-		}
+		//Stun hitstate
 		if (stunTime > 0.0f ) {
 			if (stunTime != maxStun) {
 				anim.SetBool ("hitInit", false);
@@ -67,37 +58,19 @@ public class Fighter : MonoBehaviour {
 		}else if (!attackable.alive) {
 			startHitState (10.0f);
 		}
+
 		if (currentAttackName != "none") {
 			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
+			currentAttack.startUpTick ();
+
 			if (hitboxCreated == false) {
 				if (startUpTime <= (Time.deltaTime/2)) {
-					currentAttack.startUpTick ();
 					hitboxCreated = true;
-					anim.SetInteger ("attack", currentAttack.animationID);
 					currentAttack.onAttack ();
-					if (currentAttack.soundFX != null) {
-						currentAttack.soundFX.Play ();
-					}
-					if (currentAttack.attackFX) {
-//						Debug.Log ("Creating effect");
-						GameObject fx = GameObject.Instantiate (currentAttack.attackFX, transform);
-						fx.GetComponent<disappearing> ().duration = currentAttack.recoveryTime;
 
-						fx.GetComponent<disappearing> ().toDisappear = true;
-						fx.GetComponent<Follow> ().followObj = gameObject;
-						fx.GetComponent<Follow> ().followOffset = new Vector3 (0.0f, 0.0f, -3.0f);
-						fx.GetComponent<Follow> ().toFollow = true;
-						if (movement.facingLeft) {
-							fx.transform.Rotate (new Vector3 (0f, 180f,0f));
-						}
+					if (currentAttack.soundFX != null) {currentAttack.soundFX.Play ();}
+					if (currentAttack.attackFX && onBeat) { addEffect (currentAttack.attackFX,currentAttack.recoveryTime + 0.2f); }
 
-						ParticleSystem [] partsys = fx.GetComponentsInChildren<ParticleSystem> ();
-						foreach (ParticleSystem p in partsys) {
-							ParticleSystem.MainModule mainP = p.main;
-							//mainP.startColor = currentAttack.attackPrimaryColor;
-							mainP.startLifetime = currentAttack.recoveryTime + 0.2f;
-						}
-					}
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
@@ -110,7 +83,11 @@ public class Fighter : MonoBehaviour {
 						}
 						hbm.hitboxReflect = reflectProj;
 						hbm.stun = currentAttack.stun;
-						hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+						if (Mathf.Abs(currentAttack.lineHitboxRange) > 0f) {
+							hbm.createLineHB (currentAttack.lineHitboxRange, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+						} else {
+							hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+						}
 					}
 					if (currentAttack.recoveryAnimID != currentAttack.animationID && currentAttack.recoveryAnimID > 0) {
 						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
@@ -118,15 +95,34 @@ public class Fighter : MonoBehaviour {
 				} else {
 					startUpTime = Mathf.Max (0.0f, startUpTime - Time.deltaTime);
 				}
+
 			} else {
 				if (recoveryTime <= Time.deltaTime/2.0f) {
 					endAttack ();
-
 				} else {
 					currentAttack.recoveryTick ();
 					recoveryTime = Mathf.Max (0.0f, recoveryTime - Time.deltaTime);
 				}
 			}
+		}
+	}
+
+	void addEffect(GameObject attackFX,float lifeTime) {
+		GameObject fx = GameObject.Instantiate (attackFX, transform);
+		fx.GetComponent<disappearing> ().duration = currentAttack.recoveryTime;
+
+		fx.GetComponent<disappearing> ().toDisappear = true;
+		fx.GetComponent<Follow> ().followObj = gameObject;
+		fx.GetComponent<Follow> ().followOffset = new Vector3 (0.0f, 0.0f, -3.0f);
+		fx.GetComponent<Follow> ().toFollow = true;
+		if (movement.facingLeft) {
+			fx.transform.Rotate (new Vector3 (0f, 180f,0f));
+		}
+
+		ParticleSystem [] partsys = fx.GetComponentsInChildren<ParticleSystem> ();
+		foreach (ParticleSystem p in partsys) {
+			ParticleSystem.MainModule mainP = p.main;
+			mainP.startLifetime = lifeTime; 
 		}
 	}
 	public bool isAttacking() {
@@ -182,6 +178,11 @@ public class Fighter : MonoBehaviour {
 	}
 	public bool tryAttack(string attackName) {
 		if (currentAttackName == "none" && attacks.ContainsKey(attackName)) {
+			if (gameManager.checkOnBeat()) {
+				onBeat = true;
+			} else {
+				onBeat = false;
+			}
 			hitboxCreated = false;
 			currentAttackName = attackName;
 			currentAttack = attacks[currentAttackName];

@@ -5,6 +5,7 @@ using UnityEngine;
 public class HitboxMaker : MonoBehaviour {
 
 	public GameObject hitboxClass;
+	public GameObject lineHBClass;
 	public bool hitboxReflect = false;
 	public float stun = 0f;
 	public List<string> mAttrs;
@@ -28,6 +29,25 @@ public class HitboxMaker : MonoBehaviour {
 			newBox.setFollow (gameObject,offset);
 		}
 		return newBox;
+	}
+	public hitbox createLineHB(float range, Vector2 offset,float damage, float hitboxDuration, Vector2 knockback,bool fixedKnockback,string faction, bool followObj) {
+		Vector3 newPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, 0);
+		GameObject go = Instantiate(lineHBClass,newPos,Quaternion.identity) as GameObject; 
+		lineHitbox line = go.GetComponent<lineHitbox> ();
+		line.setRange (range);
+		line.setDamage (damage);
+		line.setHitboxDuration (hitboxDuration);
+		line.setKnockback (knockback);
+		line.setFixedKnockback (fixedKnockback);
+		line.setFaction (faction);
+		line.creator = gameObject;
+		line.reflect = hitboxReflect;
+		line.stun = stun;
+		line.mAttr = mAttrs;
+		if (followObj) {
+			line.setFollow (gameObject,offset);
+		}
+		return line;
 	}
 	public void registerHit(GameObject otherObj) {
 		if (gameObject.GetComponent<Fighter> ()) {

@@ -46,8 +46,8 @@ public class Player : MonoBehaviour {
 	public float dashTime = 0.15f;
 	public float dashCooldown = 0.5f;
 	public float P1AbilityCost = 20.0f;
-	public float inputX = 0.0f;
-	public float inputY = 0.0f;
+	float inputX = 0.0f;
+	float inputY = 0.0f;
 	public float dashSpeed = 20f;
 	bool isJump;
 	float jumpPersist = 0.0f;
@@ -82,8 +82,6 @@ public class Player : MonoBehaviour {
 
 	internal void Update() {
 		timeSinceLastDash += Time.deltaTime;
-		anim.SetBool ("grounded", controller.onGround);
-		anim.SetBool ("tryingToMove", false);
 		/*
 		if (lastHealth > GetComponent<Attackable> ().health) {
 					Debug.Log ("Reset");
@@ -108,14 +106,6 @@ public class Player : MonoBehaviour {
 		inputX = 0.0f;
 		inputY = 0.0f;
 		controller.setGravityScale(gravity);
-
-		if (Input.GetKeyDown(attackKey) || Input.GetKeyDown(reflectKey) || Input.GetKeyDown(guardKey)) {
-			if (gameManager.checkOnBeat()) {
-				Debug.Log ("On beat!");
-			} else {
-				Debug.Log("Off beat!");
-			}
-		}
 
 		if (controller.canMove) {
 
@@ -212,10 +202,12 @@ public class Player : MonoBehaviour {
 		//Debug.Log("inPlayer: " + gravity * Time.deltaTime);
 		controller.Move (velocity, input);
 		if (!attackable.alive) {
-			//gameManager.gameOver = true;
-			//gameManager.winner = 2;
 			Reset ();
 		}
-			
+		anim.SetBool ("grounded", controller.onGround);
+		anim.SetBool ("tryingToMove", false);
+		if (inputX != 0.0f) {
+			anim.SetBool ("tryingToMove", true);
+		}			
 	}
 }

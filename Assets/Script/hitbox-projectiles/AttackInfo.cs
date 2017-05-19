@@ -2,25 +2,29 @@
 using UnityEngine;
 
 public class AttackInfo : MonoBehaviour {
-	public float damage = 10.0f;
-	public Vector2 knockback = new Vector2(0.0f,40.0f);
+	public string attackName = "default";
+
+	public bool createHitbox = true;
 	public Vector2 hitboxScale = new Vector2 (1.0f, 1.0f);
-	public float hitboxDuration = 0.5f;
-	public float stun = 0.3f;
+	public float lineHitboxRange = 0f;
 	public Vector2 offset = new Vector2(0f,0f);
+
+	public float damage = 10.0f;
+	public float stun = 0.3f;
+	public float hitboxDuration = 0.5f;
+	public Vector2 knockback = new Vector2(0.0f,40.0f);
 	public float startUpTime = 0.0f;
 	public float recoveryTime = 1.0f;
 	public int animationID = 1;
 	public int recoveryAnimID = -1;
 	public float animSpeed = 1f;
 	public AudioSource soundFX;
-	public string attackName = "default";
+
 	public float timeSinceStart = 0.0f;
 	public bool melee = true;
-	public bool createHitbox = true;
+
 	public GameObject attackFX;
-	//public Color attackPrimaryColor = new Color(0.0f,0.0f,0.0f);
-	//public Color attackSecondaryColor= new Color(0.0f,0.0f,0.0f);
+
 	protected Fighter fighter;
 	protected Attackable attackable;
 

@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour {
 
 	public Player followObj;
 	public float bottomOfTheWorld = -10.0f;
-	Movement controller;
+	Movement movement;
 	float gravity;
 	float jumpVelocity;
 	Vector3 velocity;
@@ -21,14 +21,16 @@ public class FollowPlayer : MonoBehaviour {
 	public bool targetSet = true;
 	public float minDistance = 1.0f;
 	public float maxDistance = 10.0f;
-	public float inputX = 0.0f;
+	float inputX = 0.0f;
 	float inputY = 0.0f;
+	Animator anim;
 
 
 	void Start () {
-		controller = GetComponent<Movement> ();
+		movement = GetComponent<Movement> ();
+		anim = GetComponent<Animator> ();
 		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
-		controller.setGravityScale(gravity);
+		movement.setGravityScale(gravity);
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		setTarget(FindObjectOfType<Player> ());
 	}
@@ -41,33 +43,36 @@ public class FollowPlayer : MonoBehaviour {
 	public void moveToPlayer() {
 		inputX = 0.0f;
 		inputY = 0.0f;
+
 		if (followObj == null)
 			return;
 		float dist = Vector3.Distance (transform.position, followObj.transform.position);
-		if (controller.canMove && dist < maxDistance) {
+		if (movement.canMove && dist < maxDistance) {
 
 			if (followObj.transform.position.x > transform.position.x) {
 				if ( dist > minDistance)
 					inputX = 1.0f;
-				controller.setFacingLeft (false);
+				movement.setFacingLeft (false);
 
 			} else {
 				if ( dist > minDistance)
 					inputX = -1.0f;
-				controller.setFacingLeft (true);
+				movement.setFacingLeft (true);
 			}
 		}
 		float targetVelocityX = inputX * moveSpeed;
-		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
+		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (movement.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 		Vector2 input = new Vector2 (inputX, inputY);
 
-		if (controller.canMove && (controller.falling == "left" || controller.falling == "right") && controller.collisions.below) {
-			//velocity.y = jumpVelocity;
-			controller.addSelfForce (new Vector2 (0f, jumpVelocity), 0f);
+		if (movement.canMove && (movement.falling == "left" || movement.falling == "right") && movement.collisions.below) {
+			movement.addSelfForce (new Vector2 (0f, jumpVelocity), 0f);
 		}
-		//velocity.y += gravity * Time.deltaTime;
-
-		controller.Move (velocity, input);
+		movement.Move (velocity, input);
+		anim.SetBool ("grounded", movement.onGround);
+		anim.SetBool ("tryingToMove", false);
+		if (inputX != 0.0f) {
+			anim.SetBool ("tryingToMove", true);
+		}
 	}
 
 	// Update is called once per frame
