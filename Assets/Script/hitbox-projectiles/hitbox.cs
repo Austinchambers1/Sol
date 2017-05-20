@@ -67,9 +67,9 @@ public class hitbox : MonoBehaviour {
 	public void addAttribute(string attr) {
 		mAttr.Add (attr);
 	}
-	internal void OnTriggerEnter2D(Collider2D other)
+	internal string OnTriggerEnter2D(Collider2D other)
 	{
-//		Debug.Log (other.gameObject.GetComponent<Attackable> () );
+		string hitResult = "none";
 		if (reflect && other.gameObject.GetComponent<Projectile> () && creator) {
 			creator.GetComponent<HitboxMaker> ().registerHit (other.gameObject);
 		}
@@ -83,7 +83,8 @@ public class hitbox : MonoBehaviour {
 			    faction != otherObj.faction) {
 				string hitType = otherObj.takeHit (this);
 				GameObject fx;
-				if (hitType == "block") {
+				hitResult = hitType;
+				if (hitType == "block" || hitType == "reflect") {
 					fx = GameObject.Instantiate (blockFX, other.gameObject.transform.position, Quaternion.identity);
 				} else {
 					fx = GameObject.Instantiate (hitFX, other.gameObject.transform.position, Quaternion.identity);
@@ -102,5 +103,6 @@ public class hitbox : MonoBehaviour {
 			}
 			collidedObjs.Add (otherObj);
 		}
+		return hitResult;
 	}
 }

@@ -57,9 +57,9 @@ public class Attackable : MonoBehaviour {
 				currDeathTime -= Time.deltaTime;
 			} else {
 				if (gameObject.name.Contains ("Enemy")) {
-					FindObjectOfType<GameManager> ().soundfx.transform.FindChild ("EnemyDeath").GetComponent<AudioSource> ().Play ();
+					FindObjectOfType<GameManager> ().soundfx.transform.Find ("EnemyDeath").GetComponent<AudioSource> ().Play ();
 				} else if (gameObject.name.Contains ("Giant")) {
-					FindObjectOfType<GameManager> ().soundfx.transform.FindChild ("GiantDeath").GetComponent<AudioSource> ().Play ();
+					FindObjectOfType<GameManager> ().soundfx.transform.Find ("GiantDeath").GetComponent<AudioSource> ().Play ();
 				}
 				Destroy (gameObject);
 			}
@@ -84,10 +84,6 @@ public class Attackable : MonoBehaviour {
 	}
 
 	public void addResistence(string attribute, float time) {
-		/*if (resistences.ContainsKey(attribute)) {
-			resistences.Remove (attribute);
-		}
-		resistences.Add (attribute, time);*/
 		resistences [attribute] = time;
 	}
 
@@ -95,19 +91,21 @@ public class Attackable : MonoBehaviour {
 		
 		if (hb.mAttr != null) {
 			foreach (string k in resistences.Keys) {
-				Debug.Log (k);
 				if (hb.mAttr.BinarySearch(k) != null) {
 					if (hb.stun > 0 && GetComponent<Fighter> ()) {
 						GetComponent<Fighter> ().registerStun( hb.stun,false,hb);
 					}
-					Debug.Log ("attack blocked");
+					if (k == "shot") {
+						return "reflect";
+					}
 					return "block";
 				}
 			}
 		}
+
 		damageObj (hb.damage);
 		if (mHitSound != "None") {
-			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.FindChild (mHitSound).GetComponent<AudioSource> ().Play ();
+			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find (mHitSound).GetComponent<AudioSource> ().Play ();
 		}
 		if (gameObject.GetComponent<Movement> ()) {
 			if (hb.fixedKnockback) {
@@ -131,6 +129,7 @@ public class Attackable : MonoBehaviour {
 		}
 		return "hit";
 	}
+
 	public void damageObj(float damage) {
 		//Debug.Log ("Damage Taken. Health before: " + health);
 		health = Mathf.Max(Mathf.Min(max_health, health - damage),0);

@@ -6,7 +6,6 @@ public class AttackInfo : MonoBehaviour {
 
 	public bool createHitbox = true;
 	public Vector2 hitboxScale = new Vector2 (1.0f, 1.0f);
-	public float lineHitboxRange = 0f;
 	public Vector2 offset = new Vector2(0f,0f);
 
 	public float damage = 10.0f;
@@ -21,7 +20,7 @@ public class AttackInfo : MonoBehaviour {
 	public AudioSource soundFX;
 
 	public float timeSinceStart = 0.0f;
-	public bool melee = true;
+	public string hitType = "melee";
 
 	public GameObject attackFX;
 

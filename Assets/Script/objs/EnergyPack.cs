@@ -26,7 +26,7 @@ public class EnergyPack : MonoBehaviour {
 		if (other.gameObject.GetComponent<Player> ()) {
 			other.gameObject.GetComponent<Attackable> ().modifyEnergy (energyValue);
 			GameObject.Destroy (gameObject);
-			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.FindChild ("PowerUp").GetComponent<AudioSource> ().Play ();
+			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("PowerUp").GetComponent<AudioSource> ().Play ();
 		}
 	}
 }

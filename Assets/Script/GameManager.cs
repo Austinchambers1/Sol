@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if (! gameStarted) {
-			startmsgs.transform.FindChild("Countdown").GetComponent<Text>().text = ( introTime - (Time.time - startTime)).ToString ();
+			startmsgs.transform.Find("Countdown").GetComponent<Text>().text = ( introTime - (Time.time - startTime)).ToString ();
 			Player1.GetComponent<Attackable> ().health = 100;
 			if (Input.GetKeyDown(KeyCode.Escape)) {
 				startGame ();

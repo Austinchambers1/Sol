@@ -77,6 +77,7 @@ public class Player : MonoBehaviour {
 		controller.accumulatedVelocity = Vector2.zero;
 		attackable.resetHealth ();
 		attackable.energy = 20.0f;
+		attackable.alive = true;
 		// reset should also bring back the startblock, if we want to keep using it.
 	}
 
@@ -98,7 +99,7 @@ public class Player : MonoBehaviour {
 			controller.addSelfForce (new Vector2 (dash, 0.0f),dashTime);
 			attackable.modifyEnergy( -P1AbilityCost);
 			timeSinceLastDash = 0.0f;
-			gameManager.soundfx.gameObject.transform.FindChild ("P1Dash").GetComponent<AudioSource> ().Play ();
+			gameManager.soundfx.gameObject.transform.Find ("P1Dash").GetComponent<AudioSource> ().Play ();
 		}
 
 		if (controller.onGround) {canDoubleJump = true;}
@@ -164,7 +165,7 @@ public class Player : MonoBehaviour {
 					//controller.velocity.y = jumpVelocity * Time.deltaTime;
 					controller.addSelfForce (jumpVector, 0f);
 					jumpPersist = 0.2f;
-					gameManager.soundfx.gameObject.transform.FindChild ("P1Jump").GetComponent<AudioSource> ().Play ();
+					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					isJump = true;
 				} else if (canDoubleJump && attackable.energy >= P1AbilityCost) {
 					velocity.y = jumpVelocity;// * Time.deltaTime;
@@ -173,7 +174,7 @@ public class Player : MonoBehaviour {
 					//controller.velocity.y = jumpVelocity * Time.deltaTime;
 					//controller.addSelfForce (jumpVector,0f);
 
-					gameManager.soundfx.gameObject.transform.FindChild ("P1Jump").GetComponent<AudioSource> ().Play ();
+					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					canDoubleJump = false;
 					attackable.energy = attackable.energy - P1AbilityCost;
 				}

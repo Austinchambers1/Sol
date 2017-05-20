@@ -56,7 +56,7 @@ public class Fighter : MonoBehaviour {
 				endStun ();
 			}
 		}else if (!attackable.alive) {
-			startHitState (10.0f);
+			startHitState (3.0f);
 		}
 
 		if (currentAttackName != "none") {
@@ -74,20 +74,14 @@ public class Fighter : MonoBehaviour {
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
-						if (currentAttack.melee) {
-							hbm.addAttrs ("melee");
-						}
+						hbm.addAttrs (currentAttack.hitType);
 						if (gameObject.GetComponent<Movement> ().facingLeft) {
 							realKB = new Vector2 (-currentAttack.knockback.x, currentAttack.knockback.y);
 							realOff = new Vector2 (-currentAttack.offset.x, currentAttack.offset.y);
 						}
 						hbm.hitboxReflect = reflectProj;
 						hbm.stun = currentAttack.stun;
-						if (Mathf.Abs(currentAttack.lineHitboxRange) > 0f) {
-							hbm.createLineHB (currentAttack.lineHitboxRange, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
-						} else {
-							hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
-						}
+						hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
 					}
 					if (currentAttack.recoveryAnimID != currentAttack.animationID && currentAttack.recoveryAnimID > 0) {
 						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
@@ -178,7 +172,7 @@ public class Fighter : MonoBehaviour {
 	}
 	public bool tryAttack(string attackName) {
 		if (currentAttackName == "none" && attacks.ContainsKey(attackName)) {
-			if (gameManager.checkOnBeat()) {
+			if (true) {
 				onBeat = true;
 			} else {
 				onBeat = false;

@@ -27,7 +27,7 @@ public class HealthPack : MonoBehaviour {
 		if (other.gameObject.GetComponent<Player> ()) {
 			other.gameObject.GetComponent<Attackable> ().damageObj (-healValue);
 			GameObject.Destroy (gameObject);
-			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.FindChild ("PowerUp").GetComponent<AudioSource> ().Play ();
+			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("PowerUp").GetComponent<AudioSource> ().Play ();
 		}
 	}
 }

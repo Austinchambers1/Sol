@@ -17,8 +17,11 @@ public class AtkReflector : AttackInfo {
 	public override void onStartUp() {
 		GetComponent<Fighter> ().reflectProj = true;
 	}
+	public override void onAttack() {
+		GetComponent<Attackable>().addResistence ("shot", base.hitboxDuration + 0.5f);
+	}
+
 	public override void onHitConfirm(GameObject other) {
-		Debug.Log ("hitConfirm");
 		if (other.GetComponent<Projectile> ()) {
 			Projectile p = other.GetComponent<Projectile> ();
 			//other.GetComponent<Movement> ().facingLeft = !other.GetComponent<Movement> ().facingLeft;
@@ -26,10 +29,9 @@ public class AtkReflector : AttackInfo {
 			p.projectileSpeed.y = p.projectileSpeed.y * -1f;
 			hitbox hb = other.GetComponentInChildren<hitbox> ();
 			hb.creator = gameObject;
-			//Debug.Log ("old: " + hb.faction);
+
 			hb.faction = GetComponent<Attackable> ().faction;
 			hb.collidedObjs = new List<Attackable> (); 
-			//Debug.Log ("new: " + hb.faction);
 			hb.hitboxDuration = Mathf.Min(Mathf.Max(0.5f,hb.hitboxDuration),2.0f) * 4.0f;
 			p.duration = hb.hitboxDuration;
 		}

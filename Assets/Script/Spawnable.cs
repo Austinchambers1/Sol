@@ -13,11 +13,11 @@ public class Spawnable : MonoBehaviour {
 	void Start () {
 		GameObject soundfx = FindObjectOfType<GameManager> ().soundfx.gameObject;
 		if (prefab.name.Contains ("Block")) {
-			soundfx.transform.FindChild ("PlaceBlock").GetComponent<AudioSource> ().Play ();
+			soundfx.transform.Find ("PlaceBlock").GetComponent<AudioSource> ().Play ();
 		} else if (prefab.name.Contains("Enemy")) {
-			soundfx.transform.FindChild ("EnemyGrunt").GetComponent<AudioSource> ().Play ();
+			soundfx.transform.Find ("EnemyGrunt").GetComponent<AudioSource> ().Play ();
 		} else if (prefab.name.Contains("Giant")) {
-			soundfx.transform.FindChild ("GiantGrunt").GetComponent<AudioSource> ().Play ();
+			soundfx.transform.Find ("GiantGrunt").GetComponent<AudioSource> ().Play ();
 		}
 	}
 	

@@ -181,12 +181,12 @@ public class GUIHandler : MonoBehaviour {
 		displayTimePassed = 0f;
 		var sound = gameManager.soundfx.gameObject.transform;
 		if (gameManager.winner == 1) {
-			if (!sound.FindChild ("P1Win").GetComponent<AudioSource> ().isPlaying ) {
-				sound.FindChild ("P1Win").GetComponent<AudioSource> ().Play ();
+			if (!sound.Find ("P1Win").GetComponent<AudioSource> ().isPlaying ) {
+				sound.Find ("P1Win").GetComponent<AudioSource> ().Play ();
 				GoToMainMenu (3f);
 			}
 		} else {
-			sound.FindChild ("P1Death").GetComponent<AudioSource> ().Play ();
+			sound.Find ("P1Death").GetComponent<AudioSource> ().Play ();
 		}
 	}
 	/*
