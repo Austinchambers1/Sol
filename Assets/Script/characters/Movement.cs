@@ -12,7 +12,7 @@ public class Movement : MonoBehaviour {
 	public Vector2 playerInput = Vector2.zero;
 	public Vector2 accumulatedVelocity = Vector2.zero;
 	public bool isGravity = true;
-	public float gravityScale = 40.0f;
+	public float gravityScale = -1.0f;
 	public float speed;
 	public bool facingLeft = false;
 	public bool canMove = true;

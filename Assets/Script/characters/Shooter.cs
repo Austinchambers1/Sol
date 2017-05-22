@@ -19,6 +19,7 @@ public class Shooter : MonoBehaviour {
 		GameObject go = Instantiate(shotPrefab,newPos,Quaternion.identity) as GameObject; 
 		Projectile proj = go.GetComponent<Projectile> ();
 		hitbox newBox = go.GetComponentInChildren<hitbox> ();
+
 		newBox.creator = gameObject;
 		newBox.setFaction (faction);
 		if (facingLeft) {

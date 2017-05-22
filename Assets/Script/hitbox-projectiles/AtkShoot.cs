@@ -19,8 +19,7 @@ public class AtkShoot : AttackInfo {
 		
 	}
 
-	public override void onAttack ()
-	{
+	public override void onAttack () {
 		mShoot.fire (shotOffset,movt.facingLeft,GetComponent<Attackable>().faction,projectile);
 	}
 }

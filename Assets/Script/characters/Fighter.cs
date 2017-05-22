@@ -25,6 +25,7 @@ public class Fighter : MonoBehaviour {
 
 	float beatTime;
 	float animationRatio;
+	bool startingNewAttack;
 
 	// Use this for initialization
 	void Start () {
@@ -47,6 +48,7 @@ public class Fighter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Stun hitstate
+		startingNewAttack = false;
 		if (stunTime > 0.0f ) {
 			if (stunTime != maxStun) {
 				anim.SetBool ("hitInit", false);
@@ -58,7 +60,6 @@ public class Fighter : MonoBehaviour {
 		}else if (!attackable.alive) {
 			startHitState (3.0f);
 		}
-
 		if (currentAttackName != "none") {
 			currentAttack.timeSinceStart = currentAttack.timeSinceStart + Time.deltaTime;
 			currentAttack.startUpTick ();
@@ -83,7 +84,7 @@ public class Fighter : MonoBehaviour {
 						hbm.stun = currentAttack.stun;
 						hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
 					}
-					if (currentAttack.recoveryAnimID != currentAttack.animationID && currentAttack.recoveryAnimID > 0) {
+					if (currentAttack.recoveryAnimID > 0) {
 						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
 					}
 				} else {
@@ -160,6 +161,8 @@ public class Fighter : MonoBehaviour {
 			currentAttack.onConclude ();
 			currentAttack.timeSinceStart = 0.0f;
 		}
+		if (startingNewAttack)
+			return;
 		currentAttackName = "none";
 		startUpTime = 0.0f;
 		recoveryTime = 0.0f;
@@ -172,7 +175,7 @@ public class Fighter : MonoBehaviour {
 	}
 	public bool tryAttack(string attackName) {
 		if (currentAttackName == "none" && attacks.ContainsKey(attackName)) {
-			if (true) {
+			if (gameManager.checkOnBeat()) {
 				onBeat = true;
 			} else {
 				onBeat = false;
@@ -187,6 +190,7 @@ public class Fighter : MonoBehaviour {
 			movement.canMove = false;
 			currentAttack.onStartUp ();
 			currentAttack.timeSinceStart = 0.0f;
+			startingNewAttack = true;
 			return true;
 		}
 		return false;

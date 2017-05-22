@@ -168,11 +168,9 @@ public class Player : MonoBehaviour {
 					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					isJump = true;
 				} else if (canDoubleJump && attackable.energy >= P1AbilityCost) {
-					velocity.y = jumpVelocity;// * Time.deltaTime;
+					velocity.y = jumpVelocity;
 					isJump = false;
 					controller.addSelfForce (jumpVector, 0f);
-					//controller.velocity.y = jumpVelocity * Time.deltaTime;
-					//controller.addSelfForce (jumpVector,0f);
 
 					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					canDoubleJump = false;
