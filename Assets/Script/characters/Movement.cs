@@ -59,12 +59,12 @@ public class Movement : MonoBehaviour {
 			}
 		} else {
 			accumulatedVelocity.x = 0f;
-		}
+		}/*
 		if (Mathf.Abs(accumulatedVelocity.y) > 2.0f) {
 			accumulatedVelocity.y *= (1f - Time.deltaTime * 3.0f);
 		} else {
 			accumulatedVelocity.y = 0f; //(1f - Time.deltaTime * 2.0f);
-		}
+		}*/
 		processMovement ();
 	}
 
@@ -85,18 +85,22 @@ public class Movement : MonoBehaviour {
 			if (selfVec.y != 0f) {
 				velocity.y = 0f;
 			}
-			velocity += (selfVec * Time.deltaTime);
+			if (timeForces [i] < Time.deltaTime) {
+				velocity += (selfVec * Time.deltaTime);
+			} else {
+				velocity += (selfVec * Time.deltaTime);
+			}
 			timeForces [i] = timeForces [i] - Time.deltaTime;
-			if (timeForces [i] < 0f) {
+			if (timeForces [i] < 0) {
 				CharForces.RemoveAt (i);
 				timeForces.RemoveAt (i);
 			}
 		}
 		if (Yf && velocity.y > terminalVelocity){
-			velocity.y += gravityScale * Time.deltaTime * Time.deltaTime;
+			velocity.y += gravityScale * Time.deltaTime;
 		}
 		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
-		velocity.y += (accumulatedVelocity.y * Time.deltaTime);
+		//velocity.y += (accumulatedVelocity.y * Time.deltaTime);
 
 		UpdateRaycastOrigins ();
 		collisions.Reset ();
@@ -181,9 +185,9 @@ public class Movement : MonoBehaviour {
 
 			if (hit && !hit.collider.isTrigger) {
 				velocity.y = (hit.distance - skinWidth) * directionY;
-				if ((directionY > 0) && accumulatedVelocity.y > 0) {
+				/*if ((directionY > 0) && accumulatedVelocity.y > 0) {
 					accumulatedVelocity.y = -(accumulatedVelocity.y * 0.7f);
-				}
+				}*/
 				rayLength = hit.distance;
 
 				if (collisions.climbingSlope) {

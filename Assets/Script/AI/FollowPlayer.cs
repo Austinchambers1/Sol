@@ -30,7 +30,7 @@ public class FollowPlayer : MonoBehaviour {
 		movement = GetComponent<Movement> ();
 		anim = GetComponent<Animator> ();
 		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
-		movement.setGravityScale(gravity);
+		movement.setGravityScale(gravity * (1.0f/60f));
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		setTarget(FindObjectOfType<Player> ());
 	}

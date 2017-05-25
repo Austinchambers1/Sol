@@ -58,7 +58,7 @@ public class Player : MonoBehaviour {
 		Fighter f = GetComponent<Fighter> ();
 		Reset ();
 		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
-		controller.setGravityScale (gravity);
+		controller.setGravityScale (gravity * (1.0f/60f));
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		jumpVector = new Vector2 (0f, jumpVelocity);
 		gameManager = FindObjectOfType<GameManager> ();
@@ -99,7 +99,7 @@ public class Player : MonoBehaviour {
 
 		inputX = 0.0f;
 		inputY = 0.0f;
-		controller.setGravityScale(gravity);
+		//controller.setGravityScale(gravity);
 
 		if (controller.canMove) {
 

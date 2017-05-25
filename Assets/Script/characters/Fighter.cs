@@ -138,8 +138,6 @@ public class Fighter : MonoBehaviour {
 		anim.SetBool ("hit", true);
 		anim.SetBool ("hitInit", true);
 		endAttack ();
-		//Debug.Log ("stunning!");
-		//Debug.Log ("remaining stun" + stunTime);
 		if (stunTime > 0.0f) {
 			hitCombo = hitCombo + 1;
 		} else {
