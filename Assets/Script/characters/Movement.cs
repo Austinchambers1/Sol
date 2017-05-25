@@ -50,21 +50,19 @@ public class Movement : MonoBehaviour {
 	}
 
 	void Update() {
+	}
+
+	void FixedUpdate() {
 		//Debug.Log (Time.deltaTime);
 		if (Mathf.Abs(accumulatedVelocity.x) > 0.3f) {
 			if (collisions.below) {
-				accumulatedVelocity.x *= (1.0f - Time.deltaTime * 2.0f);
+				accumulatedVelocity.x *= (1.0f - Time.fixedDeltaTime * 2.0f);
 			} else {
-				accumulatedVelocity.x *= (1.0f - Time.deltaTime * 3.0f);
+				accumulatedVelocity.x *= (1.0f - Time.fixedDeltaTime * 3.0f);
 			}
 		} else {
 			accumulatedVelocity.x = 0f;
-		}/*
-		if (Mathf.Abs(accumulatedVelocity.y) > 2.0f) {
-			accumulatedVelocity.y *= (1f - Time.deltaTime * 3.0f);
-		} else {
-			accumulatedVelocity.y = 0f; //(1f - Time.deltaTime * 2.0f);
-		}*/
+		}
 		processMovement ();
 	}
 
@@ -75,8 +73,7 @@ public class Movement : MonoBehaviour {
 		if (collisions.above || collisions.below){
 			velocity.y = 0.0f;
 		}  
-		playerForce = playerForce * Time.deltaTime;
-
+		playerForce = playerForce * Time.fixedDeltaTime;
 		velocity.x = playerForce.x;
 		bool Yf = true;
 
@@ -85,23 +82,21 @@ public class Movement : MonoBehaviour {
 			if (selfVec.y != 0f) {
 				velocity.y = 0f;
 			}
-			if (timeForces [i] < Time.deltaTime) {
-				velocity += (selfVec * Time.deltaTime);
+			if (timeForces [i] < Time.fixedDeltaTime) {
+				velocity += (selfVec * Time.fixedDeltaTime);
 			} else {
-				velocity += (selfVec * Time.deltaTime);
+				velocity += (selfVec * Time.fixedDeltaTime);
 			}
-			timeForces [i] = timeForces [i] - Time.deltaTime;
-			if (timeForces [i] < 0) {
+			timeForces [i] = timeForces [i] - Time.fixedDeltaTime;
+			if (timeForces [i] < 0f) {
 				CharForces.RemoveAt (i);
 				timeForces.RemoveAt (i);
 			}
 		}
 		if (Yf && velocity.y > terminalVelocity){
-			velocity.y += gravityScale * Time.deltaTime;
+			velocity.y += gravityScale * Time.fixedDeltaTime;
 		}
-		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
-		//velocity.y += (accumulatedVelocity.y * Time.deltaTime);
-
+		velocity.x += (accumulatedVelocity.x * Time.fixedDeltaTime);
 		UpdateRaycastOrigins ();
 		collisions.Reset ();
 
