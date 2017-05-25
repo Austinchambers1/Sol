@@ -9,6 +9,7 @@ public class Fighter : MonoBehaviour {
 	public float recoveryTime = 0.0f;
 	public float startUpTime = 0.0f;
 	public float stunTime = 0.0f;
+	public int hitCombo = 0;
 	public Dictionary<string,AttackInfo> attacks = new Dictionary<string,AttackInfo>();
 	string myFac;
 	Movement movement;
@@ -19,7 +20,7 @@ public class Fighter : MonoBehaviour {
 	AttackInfo currentAttack;
 	public string currentAttackName;
 	bool hitboxCreated;
-	bool onBeat;
+	public bool onBeat;
 	public bool reflectProj;
 	float maxStun;
 
@@ -126,6 +127,7 @@ public class Fighter : MonoBehaviour {
 
 	public void registerStun(float st, bool defaultStun,hitbox hb) {
 		if (defaultStun) {
+			//Debug.Log ("stunning?");
 			startHitState (st);
 		}
 		if (currentAttack != null) {
@@ -136,6 +138,14 @@ public class Fighter : MonoBehaviour {
 		anim.SetBool ("hit", true);
 		anim.SetBool ("hitInit", true);
 		endAttack ();
+		//Debug.Log ("stunning!");
+		//Debug.Log ("remaining stun" + stunTime);
+		if (stunTime > 0.0f) {
+			hitCombo = hitCombo + 1;
+		} else {
+			hitCombo = 1;
+		}
+		//Debug.Log (hitCombo);
 		stunTime = st;
 		maxStun = st;
 		movement.canMove = false;
@@ -143,6 +153,9 @@ public class Fighter : MonoBehaviour {
 	public void registerHit(GameObject otherObj) {
 		if (currentAttack != null) {
 			currentAttack.onHitConfirm (otherObj);
+			if (GetComponent<Player> ()) { //Stopgap in order to test beat recognition power.
+				GetComponent<Player> ().onHitConfirm(otherObj);
+			}
 		}
 	}
 
@@ -154,6 +167,7 @@ public class Fighter : MonoBehaviour {
 			hbm.clearAttrs ();
 			stunTime = 0.0f;
 			maxStun = 0.0f;
+			hitCombo = 0;
 		}
 	}
 	public void endAttack() {

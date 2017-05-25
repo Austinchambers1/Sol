@@ -59,7 +59,7 @@ public class continuousHitbox : MonoBehaviour {
 	internal void OnTriggerEnter2D(Collider2D other) {
 		//Debug.Log ("collision detected with Continuous hitbox");
 		if (other.gameObject.GetComponent<Attackable>()) {
-			overlappingControl.Add (other.gameObject.GetComponent<Attackable> ()); //Adds the other object's Controller2D to list of contacting objects
+			overlappingControl.Add (other.gameObject.GetComponent<Attackable> ()); 
 		}
 	} 
 	internal void OnTriggerExit2D(Collider2D other) {

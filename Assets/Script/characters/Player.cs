@@ -43,12 +43,8 @@ public class Player : MonoBehaviour {
 
 	public bool canDoubleJump = true;
 
-	public float dashTime = 0.15f;
-	public float dashCooldown = 0.5f;
-	public float P1AbilityCost = 20.0f;
 	float inputX = 0.0f;
 	float inputY = 0.0f;
-	public float dashSpeed = 20f;
 	bool isJump;
 	float jumpPersist = 0.0f;
 	float timeSinceLastDash = 0.0f;
@@ -66,8 +62,6 @@ public class Player : MonoBehaviour {
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		jumpVector = new Vector2 (0f, jumpVelocity);
 		gameManager = FindObjectOfType<GameManager> ();
-		//lastHealth = GetComponent<Attackable> ().health;		
-
 	}
 
 	public void Reset() {
@@ -76,9 +70,20 @@ public class Player : MonoBehaviour {
 		transform.position = startPosition;
 		controller.accumulatedVelocity = Vector2.zero;
 		attackable.resetHealth ();
-		attackable.energy = 20.0f;
+		attackable.energy = 0.0f;
 		attackable.alive = true;
 		// reset should also bring back the startblock, if we want to keep using it.
+	}
+	public void onHitConfirm(GameObject otherObj) {
+		Fighter mF = otherObj.GetComponent<Fighter> ();
+		if (GetComponent<Fighter>().onBeat && GetComponent<Fighter>().currentAttackName != "super") {
+			float increase = 3.0f;
+			increase += (3f * Mathf.Min(10f,mF.hitCombo));
+			if (!controller.onGround) {
+				increase *= 1.5f;
+			}
+			attackable.modifyEnergy (increase);
+		}
 	}
 
 	internal void Update() {
@@ -89,18 +94,6 @@ public class Player : MonoBehaviour {
 			FindObjectOfType<PlayerCursor> ().timeSinceLastHit = 0.0f;
 		}
 		lastHealth = GetComponent<Attackable> ().health;*/
-		if (controller.canMove && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && attackable.energy >= P1AbilityCost && timeSinceLastDash > dashCooldown) {
-			float dash = dashSpeed;
-			if (Input.GetKey (leftKey)) {
-				dash = -dash;
-			} else if (controller.facingLeft) {
-				dash = -dash;
-			}
-			controller.addSelfForce (new Vector2 (dash, 0.0f),dashTime);
-			attackable.modifyEnergy( -P1AbilityCost);
-			timeSinceLastDash = 0.0f;
-			gameManager.soundfx.gameObject.transform.Find ("P1Dash").GetComponent<AudioSource> ().Play ();
-		}
 
 		if (controller.onGround) {canDoubleJump = true;}
 
@@ -152,7 +145,12 @@ public class Player : MonoBehaviour {
 				}
 			}
 			if (Input.GetKeyDown (reflectKey)) {
-				gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
+				if (Input.GetKey(downKey) && attackable.energy >= 100.0f){
+					attackable.modifyEnergy (-100.0f);
+					gameObject.GetComponent<Fighter> ().tryAttack ("super");
+				} else {
+					gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
+				}
 			}
 			if (Input.GetKeyDown (guardKey)) {
 				gameObject.GetComponent<Fighter> ().tryAttack ("guard");
@@ -167,38 +165,23 @@ public class Player : MonoBehaviour {
 					jumpPersist = 0.2f;
 					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					isJump = true;
-				} else if (canDoubleJump && attackable.energy >= P1AbilityCost) {
+				} else if (canDoubleJump) {
 					velocity.y = jumpVelocity;
 					isJump = false;
 					controller.addSelfForce (jumpVector, 0f);
 
 					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					canDoubleJump = false;
-					attackable.energy = attackable.energy - P1AbilityCost;
 				}
 			}
-			if (Input.GetKey (jumpKey) && isJump && controller.velocity.y > 0f) {
+			/*if (Input.GetKey (jumpKey) && isJump && controller.velocity.y > 0f) {
 				controller.setGravityScale (gravity * 0.8f);
-			}
+			}*/
 		}
-		/*
-		if (jumpPersist > 0f) {
-			if (Input.GetKey (jumpKey)) {
-				if (jumpPersist > 0.01f) {
-					controller.addSelfForce (jumpVector * jumpPersist, 0f);
-				}
-				jumpPersist = jumpPersist * 0.95f;
-			} else {
-				jumpPersist = 0f;
-			}
-		}*/
-
 		//Movement logic
 		float targetVelocityX = inputX * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 		Vector2 input = new Vector2 (inputX, inputY);
-		//velocity.y += gravity * Time.deltaTime;
-		//Debug.Log("inPlayer: " + gravity * Time.deltaTime);
 		controller.Move (velocity, input);
 		if (!attackable.alive) {
 			Reset ();
@@ -207,6 +190,6 @@ public class Player : MonoBehaviour {
 		anim.SetBool ("tryingToMove", false);
 		if (inputX != 0.0f) {
 			anim.SetBool ("tryingToMove", true);
-		}			
+		}		
 	}
 }

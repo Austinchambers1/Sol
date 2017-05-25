@@ -7,7 +7,7 @@ public class Attackable : MonoBehaviour {
 	public float bottomOfTheWorld = -10.0f;
 	public float health = 100.0f;
 	public float max_health = 100.0f;
-	public float energy = 100.0f;
+	public float energy = 0.0f;
 	public float max_energy = 100.0f;
 	public bool alive = true;
 	public bool immortal = false;
@@ -64,7 +64,6 @@ public class Attackable : MonoBehaviour {
 				Destroy (gameObject);
 			}
 		}
-		modifyEnergy(EnergyRegenRate * Time.deltaTime);
 		List<string> keys = new List<string> (resistences.Keys);
 //		ArrayList toRemove = new ArrayList();
 		foreach (string k in keys) {
@@ -93,6 +92,7 @@ public class Attackable : MonoBehaviour {
 			foreach (string k in resistences.Keys) {
 				if (hb.mAttr.BinarySearch(k) != null) {
 					if (hb.stun > 0 && GetComponent<Fighter> ()) {
+						Debug.Log ("registering stun");
 						GetComponent<Fighter> ().registerStun( hb.stun,false,hb);
 					}
 					if (k == "shot") {
@@ -147,13 +147,12 @@ public class Attackable : MonoBehaviour {
 	}
 
 	public void modifyEnergy(float energyDiff) {
-		//Debug.Log ("Damage Taken. Health before: " + health);
 		energy = Mathf.Max(Mathf.Min(max_energy, energy + energyDiff),0);
-		if (energyDiff > 20) {
+		if (energyDiff > 10) {
 			GameObject.Instantiate (HealEffect, transform.position, Quaternion.identity);
 		}
-		//Debug.Log("Health afterwards: " + health);
 	}
+
 	public void resetHealth() {
 		damageObj (-1000f);
 	}

@@ -22,7 +22,6 @@ public class AtkSolUpAir : AtkDash {
 		}
 		if (timeSinceAttack > 0.2f && numHits == 1) {
 			numHits = 2;
-			Debug.Log ("second hit!");
 			HitboxMaker hbm = GetComponent<HitboxMaker> ();
 			Vector2 realKB = new Vector2(2f,10f);
 			Vector2 realOff = new Vector2(1.5f,-1f);
@@ -31,10 +30,9 @@ public class AtkSolUpAir : AtkDash {
 				realKB.x = realKB.x * -1f;
 			}
 			hbm.stun = 0.5f;
-			hbm.createHitbox (new Vector2(2.5f,0.5f), realOff, 5f, 0.2f, realKB, true, GetComponent<Attackable>().faction, true);
+			hbm.createHitbox (new Vector2(2.5f,0.8f), realOff, 5f, 0.2f, realKB, true, GetComponent<Attackable>().faction, true);
 		} else if (timeSinceAttack > 0.4f && numHits == 2) {
 			numHits = 3;
-			Debug.Log ("third hit!");
 			HitboxMaker hbm = GetComponent<HitboxMaker> ();
 			Vector2 realKB = new Vector2(10f,18f);
 			Vector2 realOff = new Vector2(1.5f,-0.5f);
@@ -44,7 +42,7 @@ public class AtkSolUpAir : AtkDash {
 			}
 
 			hbm.stun = 1.0f;
-			hbm.createHitbox (new Vector2(2.5f,0.5f), realOff, 10f, 0.5f, realKB, true, GetComponent<Attackable>().faction, true);
+			hbm.createHitbox (new Vector2(2.5f,0.9f), realOff, 5f, 0.5f, realKB, true, GetComponent<Attackable>().faction, true);
 		}
 
 		timeSinceAttack += Time.deltaTime;

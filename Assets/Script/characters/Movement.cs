@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	public void setGravityScale(float gravScale) {
-		gravityScale = gravScale * Time.deltaTime;
+		gravityScale = gravScale;
 	}
 
 	void Update() {
@@ -93,7 +93,7 @@ public class Movement : MonoBehaviour {
 			}
 		}
 		if (Yf && velocity.y > terminalVelocity){
-			velocity.y += gravityScale * Time.deltaTime;
+			velocity.y += gravityScale * Time.deltaTime * Time.deltaTime;
 		}
 		velocity.x += (accumulatedVelocity.x * Time.deltaTime);
 		velocity.y += (accumulatedVelocity.y * Time.deltaTime);
