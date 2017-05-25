@@ -26,7 +26,7 @@ public class CameraFollow : MonoBehaviour {
 		}
 	}
 
-	void LateUpdate() {
+	void Update() {
 		if (target != null) {
 			focusArea.Update (target.GetComponent<Collider2D> ().bounds);
 		}
