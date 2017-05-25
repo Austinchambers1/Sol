@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour {
 
 	void Start() {
 		bCollider = GetComponent<BoxCollider2D> ();
+		//bCollider = GetComponent<CapsuleCollider2D> ();
 		sprite = GetComponent<SpriteRenderer> ();
 		CalculateRaySpacing ();
 		canMove = true;
@@ -75,12 +76,13 @@ public class Movement : MonoBehaviour {
 		}  
 		playerForce = playerForce * Time.fixedDeltaTime;
 		velocity.x = playerForce.x;
-		bool Yf = true;
+		bool Yf = false;
 
 		for (int i = CharForces.Count - 1; i >= 0; i--) {
 			Vector2 selfVec = CharForces [i];
 			if (selfVec.y != 0f) {
 				velocity.y = 0f;
+				Yf = true;
 			}
 			if (timeForces [i] < Time.fixedDeltaTime) {
 				velocity += (selfVec * Time.fixedDeltaTime);
@@ -93,8 +95,12 @@ public class Movement : MonoBehaviour {
 				timeForces.RemoveAt (i);
 			}
 		}
-		if (Yf && velocity.y > terminalVelocity){
-			velocity.y += gravityScale * Time.fixedDeltaTime;
+		if (velocity.y > terminalVelocity){
+			if (Yf || !collisions.below) {
+				velocity.y += gravityScale * Time.fixedDeltaTime;
+			} else if (collisions.below) { //force player to stick to slopes
+				velocity.y += gravityScale * Time.fixedDeltaTime * 4f;
+			}
 		}
 		velocity.x += (accumulatedVelocity.x * Time.fixedDeltaTime);
 		UpdateRaycastOrigins ();
@@ -184,7 +190,6 @@ public class Movement : MonoBehaviour {
 					accumulatedVelocity.y = -(accumulatedVelocity.y * 0.7f);
 				}*/
 				rayLength = hit.distance;
-
 				if (collisions.climbingSlope) {
 					velocity.x = velocity.y / Mathf.Tan (collisions.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign (velocity.x);
 				}
@@ -195,29 +200,27 @@ public class Movement : MonoBehaviour {
 		}
 		falling = "none";
 		onGround = false;
-		if (directionY == -1) {
-//			string tempFalling = "none";
+		rayLength = rayLength + 0.1f;
+		if (true) { //directionY == -1) {
 			bool collide = false;
 			bool started = false;
-			rayLength = 0.2f;
-			//Debug.Log ("cast");
+			rayLength = 0.3f;
 			for (int i = 0; i < verticalRayCount; i++) {
-				Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+				Vector2 rayOrigin = raycastOrigins.bottomLeft; //true ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
 				rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
-				RaycastHit2D hit = Physics2D.Raycast (rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-				Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength,Color.red);
+				RaycastHit2D hit = Physics2D.Raycast (rayOrigin, Vector2.up * -1f, rayLength, collisionMask);
+
 				if (hit && !hit.collider.isTrigger) {
+					Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength,Color.red);
 					onGround = true;
-					//Debug.Log ("collide");
-					//Debug.Log (hit.collider.gameObject.tag);
 					if ( started && !collide) {
 						falling = "left";
 					}
 					collide = true;
 				}  else {
-					//Debug.Log ("nocollide");
+					Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength,Color.green);
 					if (started && collide) {
-							falling = "right";
+						falling = "right";
 					}
 				}
 				started = true;
@@ -240,9 +243,10 @@ public class Movement : MonoBehaviour {
 
 	void UpdateRaycastOrigins() {
 		Bounds bounds = bCollider.bounds;
+	
 		bounds.Expand (skinWidth * -2);
 
-		raycastOrigins.bottomLeft = new Vector2 (bounds.min.x, bounds.min.y);
+		raycastOrigins.bottomLeft = new Vector2 (bounds.min.x , bounds.min.y);
 		raycastOrigins.bottomRight = new Vector2 (bounds.max.x, bounds.min.y);
 		raycastOrigins.topLeft = new Vector2 (bounds.min.x, bounds.max.y);
 		raycastOrigins.topRight = new Vector2 (bounds.max.x, bounds.max.y);
