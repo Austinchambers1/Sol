@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
 
 	bool spawnNextToEndzone = false;
 
-	public bool attemptingInteraction = false;
+	bool attemptingInteraction = false;
 	Movement controller;
 	Attackable attackable;
 	Animator anim;
@@ -49,9 +49,14 @@ public class Player : MonoBehaviour {
 	float jumpPersist = 0.0f;
 	float timeSinceLastDash = 0.0f;
 
+	public float mistimedKBRatio = 1.0f;
+	public float mistimedDamageRatio = 1.0f;
+	public float mistimedStunRatio = 1.0f;
+
+
 	//public float lastHealth;
 
-	internal void Start() {
+	internal void Start()  {
 		anim = GetComponent<Animator> ();
 		controller = GetComponent<Movement> ();
 		attackable = GetComponent<Attackable> ();

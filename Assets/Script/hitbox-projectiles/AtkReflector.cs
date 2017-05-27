@@ -24,7 +24,6 @@ public class AtkReflector : AttackInfo {
 	public override void onHitConfirm(GameObject other) {
 		if (other.GetComponent<Projectile> ()) {
 			Projectile p = other.GetComponent<Projectile> ();
-			//other.GetComponent<Movement> ().facingLeft = !other.GetComponent<Movement> ().facingLeft;
 			p.projectileSpeed.x = p.projectileSpeed.x * -1f;
 			p.projectileSpeed.y = p.projectileSpeed.y * -1f;
 			hitbox hb = other.GetComponentInChildren<hitbox> ();
@@ -35,6 +34,12 @@ public class AtkReflector : AttackInfo {
 			hb.hitboxDuration = Mathf.Min(Mathf.Max(0.5f,hb.hitboxDuration),2.0f) * 4.0f;
 			p.duration = hb.hitboxDuration;
 		}
+		if (rapidRecovery) {
+			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
+		}
+	}
+
+	public override void onInterrupt(float stunTime, bool successfulHit, hitbox hb) {
 		if (rapidRecovery) {
 			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
 		}

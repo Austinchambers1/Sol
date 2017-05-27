@@ -76,14 +76,22 @@ public class Fighter : MonoBehaviour {
 					if (currentAttack.createHitbox) {
 						Vector2 realKB = currentAttack.knockback;
 						Vector2 realOff = currentAttack.offset;
+						float damage = currentAttack.damage;
+						float stun = currentAttack.stun;
 						hbm.addAttrs (currentAttack.hitType);
 						if (gameObject.GetComponent<Movement> ().facingLeft) {
 							realKB = new Vector2 (-currentAttack.knockback.x, currentAttack.knockback.y);
 							realOff = new Vector2 (-currentAttack.offset.x, currentAttack.offset.y);
 						}
+						if (!onBeat && GetComponent<Player> ()) {
+							Player plyr = GetComponent<Player> ();
+							stun *= plyr.mistimedStunRatio;
+							realKB *= plyr.mistimedKBRatio;
+							damage *= plyr.mistimedDamageRatio;
+						}
 						hbm.hitboxReflect = reflectProj;
-						hbm.stun = currentAttack.stun;
-						hbm.createHitbox (currentAttack.hitboxScale, realOff, currentAttack.damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
+						hbm.stun = stun;
+						hbm.createHitbox (currentAttack.hitboxScale, realOff, damage, currentAttack.hitboxDuration, realKB, true, myFac, true);
 					}
 					if (currentAttack.recoveryAnimID > 0) {
 						anim.SetInteger ("attack", currentAttack.recoveryAnimID);
@@ -143,7 +151,6 @@ public class Fighter : MonoBehaviour {
 		} else {
 			hitCombo = 1;
 		}
-		//Debug.Log (hitCombo);
 		stunTime = st;
 		maxStun = st;
 		movement.canMove = false;

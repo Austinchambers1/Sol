@@ -28,7 +28,6 @@ public class lineHitbox : hitbox {
 		} else if (hit) {
 			line.SetPosition (0, transform.position);
 			line.SetPosition (1, hit.point);
-			//
 			Collider2D collider = hit.collider;
 			string hitType = OnTriggerEnter2D (collider);
 			foundPoint = true;

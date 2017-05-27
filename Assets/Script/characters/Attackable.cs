@@ -71,15 +71,9 @@ public class Attackable : MonoBehaviour {
 			float time = resistences [k] - Time.deltaTime;
 			resistences [k] = time;
 			if (resistences [k] <= 0.0f) {
-				//Debug.Log ("removing resistance for" + k);
-//				resistences.Remove (k);
-
 				resistences.Remove (k);
 			}
 		}
-//		foreach (string k in toRemove) {
-//			resistences.Remove(k);
-//		}
 	}
 
 	public void addResistence(string attribute, float time) {
@@ -91,7 +85,7 @@ public class Attackable : MonoBehaviour {
 		if (hb.mAttr != null) {
 			foreach (string k in resistences.Keys) {
 				if (hb.mAttr.BinarySearch(k) != null) {
-					if (hb.stun > 0 && GetComponent<Fighter> ()) {
+					if (GetComponent<Fighter> ()) {
 						Debug.Log ("registering stun");
 						GetComponent<Fighter> ().registerStun( hb.stun,false,hb);
 					}
