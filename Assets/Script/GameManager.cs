@@ -11,16 +11,8 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance = null;
 	public int winner = 0; // 0 for no winner, 1 for player 1, 2 for player 2
 	public bool gameOver = false;
-//	public string lastMouseButtonPressed = "Left Button";
 	public Player Player1;
-//	List<GameObject> godPowers = new List<GameObject>();
-//	public GameObject prefabButton;
-//	public GameObject prefabText;
-//	public GameObject playerCursorPrefab;
-//	GameObject godCursor;
 	GameObject curPlayer;
-//	GameObject playerHealthUI;
-//	GameObject godPowerUI;
 	bool foundPlayer;
 
 	public GameObject startmsgs;
@@ -56,6 +48,7 @@ public class GameManager : MonoBehaviour {
 		winner = 0;
 		gameOver = false;
 		InitGame ();
+		foundPlayer = false;
 	}
 
 	void InitGame() {
@@ -148,6 +141,7 @@ public class GameManager : MonoBehaviour {
 		if (!foundPlayer) {
 			curPlayer = GameObject.FindGameObjectWithTag("Player") as GameObject;
 			foundPlayer = true;
+			Player1 = curPlayer.GetComponent<Player> ();
 //			playerHealthUI = (GameObject)Instantiate (playerHealth);
 //			playerHealthUI.transform.SetParent (GameObject.FindObjectOfType<Canvas> ().transform);
 //			playerHealthUI.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0.0f, -60.0f);
@@ -173,7 +167,8 @@ public class GameManager : MonoBehaviour {
 		//Destroy (startmsgs.gameObject);
 		//Destroy (startObstacle.gameObject);
 		killAllSpawnables ();
-		Player1.Reset ();
+		if (Player1) {
+			Player1.Reset ();}
 		gameStarted = true;
 	}
 

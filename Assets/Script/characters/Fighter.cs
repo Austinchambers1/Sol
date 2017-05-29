@@ -194,7 +194,7 @@ public class Fighter : MonoBehaviour {
 	}
 	public bool tryAttack(string attackName) {
 		if (currentAttackName == "none" && attacks.ContainsKey(attackName)) {
-			if (gameManager.checkOnBeat()) {
+			if (true) { //(gameManager.checkOnBeat()) {
 				onBeat = true;
 			} else {
 				onBeat = false;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [RequireComponent (typeof (Movement))]
 [RequireComponent (typeof (Fighter))]
@@ -87,6 +88,7 @@ public class Player : MonoBehaviour {
 			if (!controller.onGround) {
 				increase *= 1.5f;
 			}
+			GameObject.FindGameObjectWithTag ("ComboCount").GetComponent<Text> ().text = "Last Combo: " + mF.hitCombo.ToString ();
 			attackable.modifyEnergy (increase);
 		}
 	}
@@ -101,10 +103,8 @@ public class Player : MonoBehaviour {
 		lastHealth = GetComponent<Attackable> ().health;*/
 
 		if (controller.onGround) {canDoubleJump = true;}
-
 		inputX = 0.0f;
 		inputY = 0.0f;
-		//controller.setGravityScale(gravity);
 
 		if (controller.canMove) {
 
