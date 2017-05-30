@@ -6,7 +6,6 @@ public class Cloud : MonoBehaviour {
 
 	public Vector3 innateSpeed;
 	private Transform cameraTransform;
-	private float viewZone = 10;
 
 	private Vector2 lastCamera;
 

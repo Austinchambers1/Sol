@@ -68,12 +68,15 @@ public class Player : MonoBehaviour {
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		jumpVector = new Vector2 (0f, jumpVelocity);
 		gameManager = FindObjectOfType<GameManager> ();
+		//string ha = "Behold!`1` \n Bwahahahaha.`0.2` Look at me, I am a longer text`0.5`box!";
+		string ha = "`s0.02`Look How fast I can talk!`0.2` Now `s0.1`I can talk `s0.5`slowly!";
+		FindObjectOfType<TextboxManager> ().addTextbox (ha,gameObject,true);
 	}
 
 	public void Reset() {
 		if (spawnNextToEndzone)
 			startPosition = new Vector2 (105f, 14f); // this is right next to the endzone. (in Scene.unity)
-		transform.position = startPosition;
+		//transform.position = startPosition;
 		controller.accumulatedVelocity = Vector2.zero;
 		attackable.resetHealth ();
 		attackable.energy = 0.0f;
