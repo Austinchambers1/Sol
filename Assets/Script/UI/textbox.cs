@@ -23,6 +23,9 @@ public class textbox : MonoBehaviour {
 	void Start () {
 		line = GetComponent<LineRenderer> ();
 		mText = GetComponentInChildren<Text> ();
+		if (!typing) {
+			mText.text = fullText;
+		}
 	}
 	
 	// Update is called once per frame
@@ -91,7 +94,6 @@ public class textbox : MonoBehaviour {
 			lastCharacter = 0;
 		} else {
 			currentText = fullText;
-			mText.text = fullText;
 		}
 	}
 	public void setText(string text) {
