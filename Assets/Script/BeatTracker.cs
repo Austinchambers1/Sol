@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BeatTracker : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class BeatTracker : MonoBehaviour {
 	public float Tempo;
 	public float timePassed = 0f;
 	public float offset = 0f;
-	float QuarterNoteInterval;
+	public float QuarterNoteInterval;
 	float EigthNote;
 	float SixteenthNote;
 	public float LastTime = 0.0f;
@@ -20,16 +21,20 @@ public class BeatTracker : MonoBehaviour {
 	public float QuarterNoteActionTime = 0.0f;
 	public OnBeatEventHandler onBeat;
 	public int beatNo;
-	bool nextFrame;
+	public bool nextFrame;
+	Image beatImg;
 	List<Beats> allBeats = new List<Beats>();
 
-
+	void Awake(){
+		QuarterNoteInterval = Tempo / 60.0f / 4.0f;
+	}
 	// Use this for initialization
 	void Start () {
 		beatNo = 0;
 		QuarterNoteInterval = Tempo / 60.0f / 4.0f;
 		EigthNote = QuarterNoteInterval / 4.0f;
 		SixteenthNote = EigthNote / 4.0f;
+		beatImg = GetComponent<Image> ();
 	}
 
 	public void addBeatObj(Beats obj) {
@@ -48,10 +53,25 @@ public class BeatTracker : MonoBehaviour {
 				beatNo = 1;
 			}
 			QuarterNoteActionTime += QuarterNoteInterval;
-			float randomx = Random.value;
-			Vector3 temp = this.gameObject.transform.position;
-			temp.x = Random.value;
-			transform.position = temp;
+
+
+			if (beatImg != null) {
+				switch (beatNo) {
+				case 1:
+					beatImg.color = Color.red;
+					break;
+				case 2:
+					beatImg.color = Color.blue;
+					break;
+				case 3:
+					beatImg.color = Color.yellow;
+					break;
+				default:
+					beatImg.color = Color.green;
+					break;
+				}
+			}
+	
 			foreach (Beats b in allBeats) { 
 				b.onBeat (beatNo);
 			}
