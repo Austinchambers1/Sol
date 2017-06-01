@@ -25,20 +25,23 @@ public class RespawnObj : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		currentTime += Time.deltaTime;
-		if (currentTime > interval && spawnedItems < max_items) { 
-//			Debug.Log ("spawning obj");
-//			Debug.Log (respawnObj);
-			float newX = transform.position.x + Random.Range (-focusAreaSize.x/2,focusAreaSize.x/2);
-			float newY = transform.position.y + Random.Range (-focusAreaSize.y/2, focusAreaSize.y/2);
-			GameObject obj = GameObject.Instantiate (respawnObj, new Vector3(newX,newY,0), Quaternion.identity);
-			spawnedItems += 1;
-//			Debug.Log (spawnedItems);
-			currentTime = 0f;
-			obj.AddComponent<Respawnable> ();
-			obj.GetComponent<Respawnable> ().spawnPoint = this;
-			if (permanentObject && obj.GetComponent<disappearing> ()) {
-				Destroy (obj.GetComponent<disappearing> ());
+		if (respawnObj) {
+			
+			currentTime += Time.deltaTime;
+			if (currentTime > interval && spawnedItems < max_items) { 
+				//			Debug.Log ("spawning obj");
+				//			Debug.Log (respawnObj);
+				float newX = transform.position.x + Random.Range (-focusAreaSize.x / 2, focusAreaSize.x / 2);
+				float newY = transform.position.y + Random.Range (-focusAreaSize.y / 2, focusAreaSize.y / 2);
+				GameObject obj = GameObject.Instantiate (respawnObj, new Vector3 (newX, newY, 0), Quaternion.identity);
+				spawnedItems += 1;
+				//			Debug.Log (spawnedItems);
+				currentTime = 0f;
+				obj.AddComponent<Respawnable> ();
+				obj.GetComponent<Respawnable> ().spawnPoint = this;
+				if (permanentObject && obj.GetComponent<disappearing> ()) {
+					Destroy (obj.GetComponent<disappearing> ());
+				}
 			}
 		}
 	}

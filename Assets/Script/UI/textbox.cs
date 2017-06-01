@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class textbox : MonoBehaviour {
 
+	public TextboxManager mManager;
 	GameObject targetedObj;
 	LineRenderer line;
 	bool typing;
@@ -26,6 +27,9 @@ public class textbox : MonoBehaviour {
 		if (!typing) {
 			mText.text = fullText;
 		}
+	}
+	void OnDestroy() {
+		mManager.removeTextbox (gameObject);
 	}
 	
 	// Update is called once per frame

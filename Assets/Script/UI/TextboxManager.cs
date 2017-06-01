@@ -26,7 +26,6 @@ public class TextboxManager : MonoBehaviour {
 	}
 	public void addTextbox(string text,GameObject targetObj,bool type,float textSpeed) {
 		if (!textboxPrefab) {
-			Debug.Log ("textbox prefab not initialized in TextboxManager");
 		} else {
 			Vector2 newPos = findPosition (targetObj.transform.position);
 			GameObject newTextbox = Instantiate (textboxPrefab,newPos,Quaternion.identity);
@@ -40,6 +39,7 @@ public class TextboxManager : MonoBehaviour {
 			tb.setTargetObj (targetObj);
 			tb.pauseAfterType = timeAfter;
 			tb.timeBetweenChar = textSpeed;
+			tb.mManager = this;
 			RectTransform[] transforms = newTextbox.GetComponentsInChildren<RectTransform> ();
 			if (text.Length > 50) {
 				Vector2 v = new Vector2 ();
@@ -63,9 +63,6 @@ public class TextboxManager : MonoBehaviour {
 		float targetY = startLocation.y + (Screen.height)/100f;
 		//newPos.y = targetY;
 		foreach (GameObject o in textboxes) {
-			if (o == null) {
-				textboxes.Remove (o);
-			}
 		}
 		return new Vector2 (startLocation.x, targetY);
 	}
@@ -74,5 +71,8 @@ public class TextboxManager : MonoBehaviour {
 	}
 	public void setTextSpeed(float time ){
 		textSpeed = time;
+	}
+	public void removeTextbox(GameObject go) {
+		textboxes.Remove (go);
 	}
 }
