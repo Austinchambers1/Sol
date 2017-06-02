@@ -99,7 +99,7 @@ public class Movement : MonoBehaviour {
 			if (Yf || !collisions.below) {
 				velocity.y += gravityScale * Time.fixedDeltaTime;
 			} else if (collisions.below) { //force player to stick to slopes
-				velocity.y += gravityScale * Time.fixedDeltaTime * 4f;
+				velocity.y += gravityScale * Time.fixedDeltaTime * 6f;
 			}
 		}
 		velocity.x += (accumulatedVelocity.x * Time.fixedDeltaTime);
