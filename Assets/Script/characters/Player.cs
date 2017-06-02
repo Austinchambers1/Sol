@@ -55,6 +55,13 @@ public class Player : MonoBehaviour {
 	public float mistimedStunRatio = 1.0f;
 
 
+	public AudioClip Slash;
+	public AudioClip DelayedSlash;
+	public AudioClip ShortDelayedSlash;
+	public AudioClip MultiSlash;
+	public AudioClip FailedReflect;
+	public AudioClip SuccessfulReflect;
+
 	//public float lastHealth;
 
 	internal void Start()  {
@@ -132,30 +139,39 @@ public class Player : MonoBehaviour {
 			}
 			//Attack/Reflect/Guard Animations
 			if (Input.GetKeyDown (attackKey)) {
+				
 				if (Input.GetKey (downKey)) {
 					if (controller.onGround) {
 						gameObject.GetComponent<Fighter> ().tryAttack ("down");
+						AudioSource.PlayClipAtPoint (DelayedSlash, gameObject.transform.position);
 						attackable.modifyEnergy (100f);
 					} else {
 						gameObject.GetComponent<Fighter> ().tryAttack ("airdown");
+						AudioSource.PlayClipAtPoint (ShortDelayedSlash, gameObject.transform.position);
 					}
 				} else if (Input.GetKey (upKey)) {
 					if (controller.onGround) {
 						gameObject.GetComponent<Fighter> ().tryAttack ("up");
+						AudioSource.PlayClipAtPoint (ShortDelayedSlash, gameObject.transform.position);
 					} else {
 						gameObject.GetComponent<Fighter> ().tryAttack ("airup");
+						AudioSource.PlayClipAtPoint (MultiSlash, gameObject.transform.position);
 					}
 				}else if (Input.GetKey (leftKey) || Input.GetKey (rightKey)) {
+					AudioSource.PlayClipAtPoint (Slash, gameObject.transform.position);
 					gameObject.GetComponent<Fighter> ().tryAttack ("dash");
 				} else {
+					AudioSource.PlayClipAtPoint (Slash, gameObject.transform.position);
 					gameObject.GetComponent<Fighter> ().tryAttack ("attack");
 				}
 			}
 			if (Input.GetKeyDown (reflectKey)) {
 				if (Input.GetKey(downKey) && attackable.energy >= 100.0f){
 					gameObject.GetComponent<Fighter> ().tryAttack ("super");
+					AudioSource.PlayClipAtPoint (MultiSlash, gameObject.transform.position);
 				} else {
 					gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
+					AudioSource.PlayClipAtPoint (FailedReflect, gameObject.transform.position);
 				}
 			}
 			if (Input.GetKeyDown (guardKey)) {
