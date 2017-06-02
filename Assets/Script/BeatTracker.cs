@@ -62,7 +62,7 @@ public class BeatTracker : MonoBehaviour {
 		}
 		
 		float diff = QuarterNoteActionTime - (currTime + offset);
-		if (diff < Time.deltaTime / 2.0f || nextFrame) {
+		if (diff <= Time.deltaTime / 2.0f || nextFrame) {
 			beatNo++;
 			if (beatNo > 4) {
 				beatNo = 1;
@@ -93,7 +93,7 @@ public class BeatTracker : MonoBehaviour {
 			//BroadcastMessage ("reactToBeat", beatNo);
 			//Debug.Log (beatNo);
 			nextFrame = false;
-		} else if (diff < Time.deltaTime) {
+		} else if (diff <= Time.deltaTime) {
 			nextFrame = true;
 		}
 
