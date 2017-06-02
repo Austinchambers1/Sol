@@ -53,13 +53,13 @@ public class BeatTracker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (GameMusic == null) {
-			GameMusic = gameObject.AddComponent<AudioSource> ();
-			GameMusic.clip = Music;
-			GameMusic.loop = true;
-			GameMusic.Play ();
-			currTime = Time.time;
-		}
+//		if (GameMusic == null) {
+//			GameMusic = gameObject.AddComponent<AudioSource> ();
+//			GameMusic.clip = Music;
+//			GameMusic.loop = true;
+//			GameMusic.Play ();
+//			currTime = Time.time;
+//		}
 		
 		float diff = QuarterNoteActionTime - (currTime + offset);
 		if (diff <= Time.deltaTime / 2.0f || nextFrame) {

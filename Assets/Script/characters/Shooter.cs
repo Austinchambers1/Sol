@@ -6,6 +6,8 @@ using UnityEngine;
 public class Shooter : MonoBehaviour {
 
 	public GameObject defaultProjectile;
+
+	public AudioClip ShotSound;
 	// Use this for initialization
 	void Start () {}
 	// Update is called once per frame
@@ -18,6 +20,7 @@ public class Shooter : MonoBehaviour {
 		Vector3 newPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, 0);
 		GameObject go = Instantiate(shotPrefab,newPos,Quaternion.identity) as GameObject; 
 		Projectile proj = go.GetComponent<Projectile> ();
+		if (ShotSound != null) {AudioSource.PlayClipAtPoint (ShotSound, gameObject.transform.position);}
 		hitbox newBox = go.GetComponentInChildren<hitbox> ();
 
 		newBox.creator = gameObject;

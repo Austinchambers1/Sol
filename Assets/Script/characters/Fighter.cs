@@ -28,6 +28,8 @@ public class Fighter : MonoBehaviour {
 	float animationRatio;
 	bool startingNewAttack;
 
+	public AudioClip AttackSound;
+
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
@@ -70,7 +72,8 @@ public class Fighter : MonoBehaviour {
 					hitboxCreated = true;
 					currentAttack.onAttack ();
 
-					if (currentAttack.soundFX != null) {currentAttack.soundFX.Play ();}
+//					if (currentAttack.soundFX != null) {currentAttack.soundFX.Play ();}
+					if (AttackSound != null) {AudioSource.PlayClipAtPoint (AttackSound, gameObject.transform.position);}
 					if (currentAttack.attackFX && onBeat) { addEffect (currentAttack.attackFX,currentAttack.recoveryTime + 0.2f); }
 
 					if (currentAttack.createHitbox) {

@@ -5,8 +5,12 @@ public class disappearing : MonoBehaviour {
 
 	public float duration = 3.0f;
 	public bool toDisappear = true;
+
+	public AudioClip TickingSound;
 	// Use this for initialization
-	void Start () {}
+	void Start () {
+		if (TickingSound != null) {AudioSource.PlayClipAtPoint (TickingSound, gameObject.transform.position);}
+	}
 
 	// Update is called once per frame
 	void Update () {
