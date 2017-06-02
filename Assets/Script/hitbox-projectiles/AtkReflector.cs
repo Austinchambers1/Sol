@@ -35,13 +35,13 @@ public class AtkReflector : AttackInfo {
 			p.duration = hb.hitboxDuration;
 		}
 		if (rapidRecovery) {
-			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
+			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.5f;
 		}
 	}
 
 	public override void onInterrupt(float stunTime, bool successfulHit, hitbox hb) {
 		if (rapidRecovery) {
-			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.3f;
+			GetComponent<Fighter>().recoveryTime = GetComponent<Fighter>().recoveryTime * 0.5f;
 		}
 	}
 }
