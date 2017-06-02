@@ -25,6 +25,9 @@ public class BeatTracker : MonoBehaviour {
 	Image beatImg;
 	List<Beats> allBeats = new List<Beats>();
 
+	public AudioClip Music;
+	private AudioSource GameMusic = null;
+
 	void Awake(){
 		/*QuarterNoteInterval = Tempo / 60.0f / 4.0f;*/
 		beatNo = 0;
@@ -33,6 +36,8 @@ public class BeatTracker : MonoBehaviour {
 		SixteenthNote = EigthNote / 4.0f;
 		beatImg = GetComponent<Image> ();
 		currTime = Time.time;
+
+
 	}
 	// Use this for initialization
 	void Start () {
@@ -48,6 +53,13 @@ public class BeatTracker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GameMusic == null) {
+			GameMusic = gameObject.AddComponent<AudioSource> ();
+			GameMusic.clip = Music;
+			GameMusic.loop = true;
+			GameMusic.Play ();
+			currTime = Time.time;
+		}
 		
 		float diff = QuarterNoteActionTime - (currTime + offset);
 		if (diff < Time.deltaTime / 2.0f || nextFrame) {
