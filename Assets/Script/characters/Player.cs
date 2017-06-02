@@ -166,16 +166,19 @@ public class Player : MonoBehaviour {
 				}
 			}
 			if (Input.GetKeyDown (reflectKey)) {
-				if (Input.GetKey(downKey) && attackable.energy >= 100.0f){
+				if (attackable.energy >= 100.0f){
 					gameObject.GetComponent<Fighter> ().tryAttack ("super");
 					AudioSource.PlayClipAtPoint (MultiSlash, gameObject.transform.position);
-				} else {
-					gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
-					AudioSource.PlayClipAtPoint (FailedReflect, gameObject.transform.position);
 				}
 			}
 			if (Input.GetKeyDown (guardKey)) {
-				gameObject.GetComponent<Fighter> ().tryAttack ("guard");
+				if (Input.GetKey(downKey) ) {
+					gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
+					AudioSource.PlayClipAtPoint (FailedReflect, gameObject.transform.position);
+				} else {
+					gameObject.GetComponent<Fighter> ().tryAttack ("guard");
+				}
+
 			}
 
 			
