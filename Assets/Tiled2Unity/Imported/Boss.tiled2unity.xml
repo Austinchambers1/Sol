@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--Tiled2Unity generated xml data-->
 <!--Do not modify by hand-->
-<!--Last exported: 6/2/2017 4:25:27 PM-->
+<!--Last exported: 6/2/2017 5:05:21 PM-->
 <Tiled2Unity version="1.0.11.2">
   <AssignMaterial mesh="mesh_0001" material="outdoor" />
   <AssignMaterial mesh="mesh_0002" material="outdoor" />
@@ -37,10 +37,16 @@
           <Points>0,0 328,0 328,-48 288,-48 264,-72 256,-80 224,-80 200,-104 200,-144 160,-144 128,-168 72,-168 64,-176 64,-200 96,-200 120,-208 128,-216 128,-280 96,-296 96,-456 224,-456 256,-488 544,-488 624,-456 640,-456</Points>
         </EdgeCollider2D>
       </GameObject>
+      <GameObject name="PolylineObject" x="1536" y="-768" rotation="0">
+        <PolylineObjectComponent tmx-object-id="4" tmx-object-name="" tmx-object-type="" tmx-object-x="1536" tmx-object-y="768" tmx-object-width="0" tmx-object-height="0" tmx-object-rotation="0" />
+        <EdgeCollider2D>
+          <Points>0,0 -704,0 -704,32 -736,32 -736,224 -736,608 0,640 0,256</Points>
+        </EdgeCollider2D>
+      </GameObject>
       <GameObject name="PolylineObject" x="640" y="-928" rotation="0">
         <PolylineObjectComponent tmx-object-id="2" tmx-object-name="" tmx-object-type="" tmx-object-x="640" tmx-object-y="928" tmx-object-width="0" tmx-object-height="0" tmx-object-rotation="0" />
         <EdgeCollider2D>
-          <Points>0,0 48,32 64,32 88,40 112,40 128,32 160,56 160,416 256,416</Points>
+          <Points>0,0 48,32 64,32 88,40 112,40 128,32 160,56 896,64 896,416</Points>
         </EdgeCollider2D>
       </GameObject>
     </GameObject>

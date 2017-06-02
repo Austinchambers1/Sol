@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="4">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="5">
  <properties>
   <property name="unity:scale" value="0.0625"/>
  </properties>
@@ -376,7 +376,10 @@
    <polyline points="0,0 328,0 328,48 288,48 264,72 256,80 224,80 200,104 200,144 160,144 128,168 72,168 64,176 64,200 96,200 120,208 128,216 128,280 96,296 96,456 224,456 256,488 544,488 624,456 640,456"/>
   </object>
   <object id="2" x="640" y="928">
-   <polyline points="0,0 48,-32 64,-32 88,-40 112,-40 128,-32 160,-56 160,-416 256,-416"/>
+   <polyline points="0,0 48,-32 64,-32 88,-40 112,-40 128,-32 160,-56 896,-64 896,-416"/>
+  </object>
+  <object id="4" x="1536" y="768">
+   <polyline points="0,0 -704,0 -704,-32 -736,-32 -736,-224 -736,-608 0,-640 0,-256"/>
   </object>
  </objectgroup>
 </map>

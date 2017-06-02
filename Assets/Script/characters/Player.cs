@@ -81,7 +81,7 @@ public class Player : MonoBehaviour {
 	public void Reset() {
 		if (spawnNextToEndzone)
 			startPosition = new Vector2 (105f, 14f); // this is right next to the endzone. (in Scene.unity)
-		//transform.position = startPosition;
+		transform.position = startPosition;
 		controller.accumulatedVelocity = Vector2.zero;
 		attackable.resetHealth ();
 		attackable.energy = 0.0f;
