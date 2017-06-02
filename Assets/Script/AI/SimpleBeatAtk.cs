@@ -7,6 +7,7 @@ public class SimpleBeatAtk : Beats {
 
 	public string attackName = "attack";
 	public int attackOnBeat = 1;
+	public float chance = 1.0f;
 	Fighter mFighter;
 	// Use this for initialization
 	void Start () {
