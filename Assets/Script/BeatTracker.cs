@@ -26,15 +26,17 @@ public class BeatTracker : MonoBehaviour {
 	List<Beats> allBeats = new List<Beats>();
 
 	void Awake(){
-		QuarterNoteInterval = Tempo / 60.0f / 4.0f;
-	}
-	// Use this for initialization
-	void Start () {
+		/*QuarterNoteInterval = Tempo / 60.0f / 4.0f;*/
 		beatNo = 0;
 		QuarterNoteInterval = Tempo / 60.0f / 4.0f;
 		EigthNote = QuarterNoteInterval / 4.0f;
 		SixteenthNote = EigthNote / 4.0f;
 		beatImg = GetComponent<Image> ();
+		currTime = Time.time;
+	}
+	// Use this for initialization
+	void Start () {
+		
 	}
 
 	public void addBeatObj(Beats obj) {
@@ -46,7 +48,8 @@ public class BeatTracker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float diff = QuarterNoteActionTime - (Time.time + offset);
+		
+		float diff = QuarterNoteActionTime - (currTime + offset);
 		if (diff < Time.deltaTime / 2.0f || nextFrame) {
 			beatNo++;
 			if (beatNo > 4) {
@@ -81,5 +84,7 @@ public class BeatTracker : MonoBehaviour {
 		} else if (diff < Time.deltaTime) {
 			nextFrame = true;
 		}
+
+		currTime = Time.time;
 	}
 }
