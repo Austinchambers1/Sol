@@ -6,6 +6,8 @@ public class EnergyPack : MonoBehaviour {
 	public float energyValue = 15.0f;
 	Movement movement;
 	Vector3 velocity; 
+
+	public AudioClip PowerUpSound;
 	// Use this for initialization
 	void Start () {
 		movement = gameObject.GetComponent<Movement> ();
@@ -26,7 +28,8 @@ public class EnergyPack : MonoBehaviour {
 		if (other.gameObject.GetComponent<Player> ()) {
 			other.gameObject.GetComponent<Attackable> ().modifyEnergy (energyValue);
 			GameObject.Destroy (gameObject);
-			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("PowerUp").GetComponent<AudioSource> ().Play ();
+//			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("PowerUp").GetComponent<AudioSource> ().Play ();
+			if (PowerUpSound != null) {AudioSource.PlayClipAtPoint (PowerUpSound, other.transform.position);}
 		}
 	}
 }
