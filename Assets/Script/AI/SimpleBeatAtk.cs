@@ -23,7 +23,7 @@ public class SimpleBeatAtk : Beats {
 
 	public override void onBeat (int beatNo) {
 		//Debug.Log ("on simple beat");
-		if (beatNo == attackOnBeat) {
+		if (beatNo == attackOnBeat && Random.Range(0.0f,1.0f) <= chance) {
 			//Debug.Log ("trying attack: " + attackName);
 			mFighter.tryAttack (attackName);
 		}

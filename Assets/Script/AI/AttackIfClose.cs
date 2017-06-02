@@ -9,6 +9,7 @@ public class AttackIfClose : Beats {
 	public string attackName = "attack";
 	FollowPlayer followai;
 	public int attackOnBeat = 1;
+	public float chance = 1.0f;
 	bool inRange = false;
 
 	Movement movt;
@@ -38,7 +39,7 @@ public class AttackIfClose : Beats {
 
 	public override void onBeat (int beatNo) {
 		//Debug.Log ("on simple beat");
-		if (inRange && beatNo == attackOnBeat) {
+		if (inRange && beatNo == attackOnBeat && Random.Range(0.0f,1.0f) <= chance) {
 			//Debug.Log ("trying attack: " + attackName);
 			followai.moveToPlayer ();
 			gameObject.GetComponent<Fighter> ().tryAttack (attackName);
