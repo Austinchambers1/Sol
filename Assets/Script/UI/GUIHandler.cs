@@ -17,7 +17,7 @@ public class GUIHandler : MonoBehaviour {
 	//private string P2EnergyShowing;
 	//public Image P2EnergyBarFill;
 
-	public GameObject P1Instructions;
+	//public GameObject P1Instructions;
 	//public GameObject P2Instructions;
 
 	//public Color leftColor;
@@ -58,7 +58,7 @@ public class GUIHandler : MonoBehaviour {
 		P2EnergyShowing = "";
 
 		P2Instructions.gameObject.SetActive (true);*/
-		P1Instructions.gameObject.SetActive (true);
+		//P1Instructions.gameObject.SetActive (true);
 		attemptNumber = 1;
 		mainMenu = false;
 	}
@@ -73,13 +73,13 @@ public class GUIHandler : MonoBehaviour {
 			allPowers = gameManager.allPowers;
 		}
 */
-		if (Input.GetKeyDown(KeyCode.H)) {
+		/*if (Input.GetKeyDown(KeyCode.H)) {
 			if (P1Instructions.activeSelf) {
 				P1Instructions.gameObject.SetActive(false);
 			} else {
 				P1Instructions.gameObject.SetActive(true);
 			}
-		}
+		}*/
 		/*
 		if (Input.GetKeyDown(KeyCode.Mouse2)) {
 			if (P2Instructions.activeSelf) {

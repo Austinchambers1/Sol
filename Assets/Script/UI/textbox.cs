@@ -12,7 +12,7 @@ public class textbox : MonoBehaviour {
 	Vector3 lastPos;
 	string fullText;
 	string currentText;
-	public float timeBetweenChar = 0.05f;
+	public float timeBetweenChar = 0.01f;
 	float sinceLastChar = 0f;
 	float pauseTime = 0f;
 	float timeSinceStop = 0f;
@@ -23,6 +23,7 @@ public class textbox : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		line = GetComponent<LineRenderer> ();
+		line.sortingOrder = 4;
 		mText = GetComponentInChildren<Text> ();
 		if (!typing) {
 			mText.text = fullText;
@@ -64,7 +65,6 @@ public class textbox : MonoBehaviour {
 								lastCharacter++;
 								nextChar = fullText.ToCharArray () [lastCharacter - 1];
 							}
-							Debug.Log (num);
 							if (textSpeed) {
 								timeBetweenChar = float.Parse (num);
 							} else { 

@@ -68,10 +68,7 @@ public class Player : MonoBehaviour {
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 		jumpVector = new Vector2 (0f, jumpVelocity);
 		gameManager = FindObjectOfType<GameManager> ();
-		//string ha = "Pause!`1` \n Bwahahahaha.`0.2` Look at me, I am a longer text`0.5`box!";
-		string ha = "`s0.02`Look How fast I can talk!`0.2` Now `s0.1`I can talk `s0.5`slowly!";
-		string noParse = " no parsing";
-		FindObjectOfType<TextboxManager> ().addTextbox (ha,gameObject,true);
+		startPosition = transform.position;
 	}
 
 	public void Reset() {
@@ -138,6 +135,7 @@ public class Player : MonoBehaviour {
 				if (Input.GetKey (downKey)) {
 					if (controller.onGround) {
 						gameObject.GetComponent<Fighter> ().tryAttack ("down");
+						attackable.modifyEnergy (100f);
 					} else {
 						gameObject.GetComponent<Fighter> ().tryAttack ("airdown");
 					}
@@ -155,7 +153,6 @@ public class Player : MonoBehaviour {
 			}
 			if (Input.GetKeyDown (reflectKey)) {
 				if (Input.GetKey(downKey) && attackable.energy >= 100.0f){
-					attackable.modifyEnergy (-100.0f);
 					gameObject.GetComponent<Fighter> ().tryAttack ("super");
 				} else {
 					gameObject.GetComponent<Fighter> ().tryAttack ("reflect");
@@ -172,14 +169,14 @@ public class Player : MonoBehaviour {
 					//controller.velocity.y = jumpVelocity * Time.deltaTime;
 					controller.addSelfForce (jumpVector, 0f);
 					jumpPersist = 0.2f;
-					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
+					//gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					isJump = true;
 				} else if (canDoubleJump) {
 					velocity.y = jumpVelocity;
 					isJump = false;
 					controller.addSelfForce (jumpVector, 0f);
 
-					gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
+					//gameManager.soundfx.gameObject.transform.Find ("P1Jump").GetComponent<AudioSource> ().Play ();
 					canDoubleJump = false;
 				}
 			}
