@@ -23,7 +23,7 @@ public class TextboxWhenNear : MonoBehaviour {
 	}
 
 	internal void OnTriggerEnter2D(Collider2D other) {
-		Debug.Log ("detection with obj: " + other.gameObject.GetComponent<Player> ().ToString());
+//		Debug.Log ("detection with obj: " + other.gameObject.GetComponent<Player> ().ToString());
 		if (other.gameObject.GetComponent<Player> () && currentInterval <= 0.0f) {
 			currentInterval = interval;
 			tm.addTextbox (displayText,gameObject,typeText);
