@@ -5,6 +5,8 @@ using UnityEngine;
 public class AtkReflector : AttackInfo {
 
 	public bool rapidRecovery = false;
+
+	public AudioClip ReflectSound;
 	// Use this for initialization
 	void Start () {
 		
@@ -26,6 +28,7 @@ public class AtkReflector : AttackInfo {
 			Projectile p = other.GetComponent<Projectile> ();
 			p.projectileSpeed.x = p.projectileSpeed.x * -1f;
 			p.projectileSpeed.y = p.projectileSpeed.y * -1f;
+			if (ReflectSound != null) {AudioSource.PlayClipAtPoint (ReflectSound, gameObject.transform.position);}
 			hitbox hb = other.GetComponentInChildren<hitbox> ();
 			hb.creator = gameObject;
 
