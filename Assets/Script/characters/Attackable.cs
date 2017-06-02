@@ -23,6 +23,8 @@ public class Attackable : MonoBehaviour {
 	float currDeathTime;
 	SpriteRenderer renderer;
 
+	public AudioClip Hit;
+
 
 	public Dictionary<string,float> resistences = new Dictionary<string,float>();
 
@@ -102,6 +104,7 @@ public class Attackable : MonoBehaviour {
 		if (mHitSound != "None") {
 			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find (mHitSound).GetComponent<AudioSource> ().Play ();
 		}
+		AudioSource.PlayClipAtPoint (Hit, gameObject.transform.position);
 		if (gameObject.GetComponent<Movement> ()) {
 			if (hb.fixedKnockback) {
 				addToVelocity (hb.knockback);
