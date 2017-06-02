@@ -63,10 +63,11 @@ public class BeatTracker : MonoBehaviour {
 		
 		float diff = QuarterNoteActionTime - (currTime + offset);
 		if (diff <= Time.deltaTime / 2.0f || nextFrame) {
-			beatNo++;
-			if (beatNo > 4) {
-				beatNo = 1;
-			}
+//			beatNo++;
+//			if (beatNo > 4) {
+//				beatNo = 1;
+//			}
+			beatNo = 1 + ((int)(QuarterNoteActionTime * 2)) % 4;
 			QuarterNoteActionTime += QuarterNoteInterval;
 
 
