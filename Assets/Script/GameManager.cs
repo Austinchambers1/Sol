@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject audio;
 	public float introTime;
-	public GameObject soundfx;
+//	public GameObject soundfx;
 
 	private bool gameStarted = false;
 

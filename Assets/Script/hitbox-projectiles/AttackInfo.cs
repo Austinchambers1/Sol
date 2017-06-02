@@ -17,7 +17,7 @@ public class AttackInfo : MonoBehaviour {
 	public int animationID = 1;
 	public int recoveryAnimID = -1;
 	public float animSpeed = 1f;
-	public AudioSource soundFX;
+//	public AudioSource soundFX;
 
 	public float timeSinceStart = 0.0f;
 	public string hitType = "melee";

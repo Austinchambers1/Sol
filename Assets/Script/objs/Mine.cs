@@ -52,7 +52,7 @@ public class Mine : MonoBehaviour {
 		explosion.transform.localScale = new Vector3 (hitboxScale.x/16f,hitboxScale.y/16f,hitboxScale.x/16f);
 		gameObject.GetComponent<HitboxMaker> ().createHitbox(hitboxScale,Vector2.zero,damage,hitboxDuration,knockback,false,"noFaction",false);
 		Destroy (this.gameObject);
-		FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("MineExplosion").GetComponent<AudioSource> ().Play ();
+//		FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find ("MineExplosion").GetComponent<AudioSource> ().Play ();
 	}
 
 }

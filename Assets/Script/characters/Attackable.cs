@@ -60,9 +60,9 @@ public class Attackable : MonoBehaviour {
 				currDeathTime -= Time.deltaTime;
 			} else {
 				if (gameObject.name.Contains ("Enemy")) {
-					FindObjectOfType<GameManager> ().soundfx.transform.Find ("EnemyDeath").GetComponent<AudioSource> ().Play ();
+//					FindObjectOfType<GameManager> ().soundfx.transform.Find ("EnemyDeath").GetComponent<AudioSource> ().Play ();
 				} else if (gameObject.name.Contains ("Giant")) {
-					FindObjectOfType<GameManager> ().soundfx.transform.Find ("GiantDeath").GetComponent<AudioSource> ().Play ();
+//					FindObjectOfType<GameManager> ().soundfx.transform.Find ("GiantDeath").GetComponent<AudioSource> ().Play ();
 				}
 				Destroy (gameObject);
 			}
@@ -102,7 +102,7 @@ public class Attackable : MonoBehaviour {
 
 		damageObj (hb.damage);
 		if (mHitSound != "None") {
-			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find (mHitSound).GetComponent<AudioSource> ().Play ();
+//			FindObjectOfType<GameManager> ().soundfx.gameObject.transform.Find (mHitSound).GetComponent<AudioSource> ().Play ();
 		}
 		AudioSource.PlayClipAtPoint (Hit, gameObject.transform.position);
 		if (gameObject.GetComponent<Movement> ()) {

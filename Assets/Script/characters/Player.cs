@@ -144,7 +144,7 @@ public class Player : MonoBehaviour {
 					if (controller.onGround) {
 						gameObject.GetComponent<Fighter> ().tryAttack ("down");
 						AudioSource.PlayClipAtPoint (DelayedSlash, gameObject.transform.position);
-						attackable.modifyEnergy (100f);
+						//attackable.modifyEnergy (100f);
 					} else {
 						gameObject.GetComponent<Fighter> ().tryAttack ("airdown");
 						AudioSource.PlayClipAtPoint (ShortDelayedSlash, gameObject.transform.position);
