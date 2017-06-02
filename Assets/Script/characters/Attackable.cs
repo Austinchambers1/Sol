@@ -12,6 +12,7 @@ public class Attackable : MonoBehaviour {
 	public bool alive = true;
 	public bool immortal = false;
 	public string faction = "noFaction";
+	public string groupID = "";
 	public GameObject HitEffect;
 	public GameObject HealEffect;
 	public GameObject DeathEffect;

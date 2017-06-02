@@ -10,6 +10,7 @@ public class RespawnObj : MonoBehaviour {
 	public int spawnedItems = 0;
 	public bool resetTimerOnDestroy = true;
 	public bool permanentObject = false;
+	public string groupID = "none";
 	float currentTime;
 	public Vector2 focusAreaSize = new Vector2(0,0);
 	// Use this for initialization
@@ -39,6 +40,9 @@ public class RespawnObj : MonoBehaviour {
 				currentTime = 0f;
 				obj.AddComponent<Respawnable> ();
 				obj.GetComponent<Respawnable> ().spawnPoint = this;
+				if (obj.GetComponent<Attackable> ()) { 
+					obj.GetComponent<Attackable> ().groupID = groupID;
+				}
 				if (permanentObject && obj.GetComponent<disappearing> ()) {
 					Destroy (obj.GetComponent<disappearing> ());
 				}
