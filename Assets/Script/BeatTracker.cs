@@ -53,13 +53,14 @@ public class BeatTracker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		if (GameMusic == null) {
-//			GameMusic = gameObject.AddComponent<AudioSource> ();
-//			GameMusic.clip = Music;
-//			GameMusic.loop = true;
-//			GameMusic.Play ();
-//			currTime = Time.time;
-//		}
+		if (GameMusic == null) {
+			GameMusic = gameObject.AddComponent<AudioSource> ();
+			GameMusic.clip = Music;
+			GameMusic.loop = true;
+			GameMusic.Play ();
+			currTime = Time.time;
+			Debug.Log (currTime);
+		}
 		
 		float diff = QuarterNoteActionTime - (currTime + offset);
 		if (diff <= Time.deltaTime / 2.0f || nextFrame) {
@@ -67,7 +68,7 @@ public class BeatTracker : MonoBehaviour {
 //			if (beatNo > 4) {
 //				beatNo = 1;
 //			}
-			beatNo = 1 + ((int)(QuarterNoteActionTime * 2)) % 4;
+			beatNo = 1 + ((int)(QuarterNoteActionTime * 2)+1) % 4;
 			QuarterNoteActionTime += QuarterNoteInterval;
 
 
@@ -88,7 +89,7 @@ public class BeatTracker : MonoBehaviour {
 				}
 			}
 	
-			foreach (Beats b in allBeats) { 
+			foreach (Beats b in allBeats) {
 				b.onBeat (beatNo);
 			}
 			//BroadcastMessage ("reactToBeat", beatNo);
